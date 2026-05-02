@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Mic, Headphones, Wallet, Wifi, PhoneCall, ShieldAlert } from 'lucide-react';
 import type { Language } from '../App';
 
+const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : '';
+
 interface Props {
   language: Language;
   goBack: () => void;
@@ -33,7 +35,7 @@ export default function VoiceMode({ language, goBack }: Props) {
     setVisualState('speaking');
     
     try {
-      const response = await fetch('http://localhost:3001/api/chat', {
+      const response = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, language })

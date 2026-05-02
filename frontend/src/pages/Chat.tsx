@@ -20,6 +20,8 @@ interface Message {
 
 const QUICK_ACTIONS = ["Mon Solde", "Pass Internet", "Orange Money", "Assistance réseau"];
 
+const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : '';
+
 export default function Chat({ language, goBack, initialPrompt, category }: Props) {
   const getWelcomeMsg = () => {
     if (category) return `Bonjour ! Vous êtes dans la section **${category.label}**. Je suis là pour vous aider. Décrivez votre problème ou posez votre question.`;
@@ -73,7 +75,7 @@ export default function Chat({ language, goBack, initialPrompt, category }: Prop
     setIsTyping(true);
 
     try {
-      const response = await fetch('http://localhost:3001/api/chat', {
+      const response = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, language })
@@ -154,7 +156,7 @@ export default function Chat({ language, goBack, initialPrompt, category }: Prop
 
   const verifyOtp = async () => {
     try {
-      const resp = await fetch('http://localhost:3001/api/auth/verify-otp', {
+      const resp = await fetch(`${API_BASE}/api/auth/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phoneNumber: '0000', otp: otpCode })
