@@ -5,61 +5,50 @@
 @tailwind utilities;
 
 :root {
-  --orange-primary: #FF7900;
-  --orange-dark: #cc6100;
-  --bg-corporate: #f8fafc;
-  --surface-white: #ffffff;
-  --text-dark: #0f172a;
-  --text-slate: #64748b;
-  --border-light: #e2e8f0;
+  --orange-brand: #FF7900;
+  --bg-app: #F9F9F9;
+  --text-main: #2D2D2D;
+  --text-muted: #757575;
 }
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--bg-corporate);
-  color: var(--text-dark);
-  -webkit-font-smoothing: antialiased;
+  background-color: #E5E7EB; /* Couleur fond pour simuler le téléphone */
+  color: var(--text-main);
+  margin: 0;
 }
 
-.font-outfit {
-  font-family: 'Outfit', sans-serif;
+/* Container Type Téléphone comme sur vos maquettes */
+.mobile-frame {
+  @apply w-full h-[100dvh] bg-[#F9F9F9] shadow-2xl relative flex flex-col overflow-hidden;
 }
 
 @layer components {
-  .premium-card {
-    @apply bg-white border border-slate-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04),0_4px_6px_-2px_rgba(0,0,0,0.02)] rounded-xl transition-all duration-300;
+  .btn-orange {
+    @apply bg-orange-brand text-white font-bold py-4 px-8 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-orange-brand/20;
   }
   
-  .premium-button-primary {
-    @apply bg-slate-900 hover:bg-black text-white px-6 py-3.5 rounded-lg font-semibold transition-all duration-200 active:scale-95 shadow-sm;
+  .card-language {
+    @apply bg-white border-2 border-transparent rounded-2xl p-6 flex flex-col items-center justify-center gap-4 transition-all shadow-sm;
+  }
+  
+  .card-language.selected {
+    @apply border-orange-brand ring-1 ring-orange-brand/20;
   }
 
-  .premium-input {
-    @apply w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all;
+  .nav-item {
+    @apply flex flex-col items-center gap-1 text-[10px] font-bold text-slate-400 transition-colors;
   }
 
-  .glass-header {
-    @apply bg-white/80 backdrop-blur-md border-b border-white/20 sticky top-0 z-50;
+  .nav-item.active {
+    @apply text-orange-brand;
   }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 5px;
+/* Effets d'ondes pour le micro (Ripple Effect de vos maquettes) */
+.ripple-container {
+  @apply relative flex items-center justify-center;
 }
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 rounded-full;
-}
-
-/* Animations */
-@keyframes slideUpSoft {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-slide-up-soft {
-  animation: slideUpSoft 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.ripple {
+  @apply absolute rounded-full border border-orange-brand/20 animate-ping;
 }
