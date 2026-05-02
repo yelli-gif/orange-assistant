@@ -83,6 +83,13 @@ export default function Chat({ language, initialPrompt, interactionMode }: Props
     }
   };
 
+  useEffect(() => {
+    if (initialPrompt) {
+      const timer = setTimeout(() => handleSend(initialPrompt), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [initialPrompt]);
+
   return (
     <div className="flex flex-col h-full bg-[#F9F9F9] animate-fade-in relative overflow-hidden">
       

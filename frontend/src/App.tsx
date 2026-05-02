@@ -10,7 +10,7 @@ import Claim from './pages/Claim';
 import Purchase from './pages/Purchase';
 
 export type Language = 'fr' | 'nouchi' | 'dioula' | 'baoule' | 'en' | null;
-export type Screen = 'SPLASH' | 'HOME' | 'MODE_SELECT' | 'CATEGORY' | 'CHAT_TEXT' | 'DASHBOARD' | 'CLAIM' | 'PURCHASE';
+export type Screen = 'SPLASH' | 'HOME' | 'MODE_SELECT' | 'CATEGORY' | 'CHAT_TEXT' | 'CHAT_VOICE' | 'DASHBOARD' | 'CLAIM' | 'PURCHASE';
 
 function App() {
   const [screen, setScreen] = useState<Screen>('SPLASH');
