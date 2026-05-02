@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { Home, Grid, LayoutDashboard, UserCircle2, SignalMedium } from 'lucide-react';
+import { Home, Grid, LayoutDashboard, UserCircle2, SignalMedium, Bot } from 'lucide-react';
 import SplashScreen from './pages/SplashScreen';
 import LanguageSelection from './pages/LanguageSelection';
 import ModeSelection from './pages/ModeSelection';
 import CategoryMenu, { type Category } from './pages/CategoryMenu';
 import Chat from './pages/Chat';
-import VoiceMode from './pages/VoiceMode';
+import Dashboard from './pages/Dashboard';
+import Claim from './pages/Claim';
+import Purchase from './pages/Purchase';
 
 export type Language = 'fr' | 'nouchi' | 'dioula' | 'baoule' | 'en' | null;
-export type Screen = 'SPLASH' | 'HOME' | 'MODE_SELECT' | 'CATEGORY' | 'CHAT_TEXT' | 'CHAT_VOICE';
+export type Screen = 'SPLASH' | 'HOME' | 'MODE_SELECT' | 'CATEGORY' | 'CHAT_TEXT' | 'DASHBOARD' | 'CLAIM' | 'PURCHASE';
 
 function App() {
   const [screen, setScreen] = useState<Screen>('SPLASH');
@@ -18,7 +20,7 @@ function App() {
   const [interactionMode, setInteractionMode] = useState<'text' | 'voice'>('text');
 
   const goBack = () => {
-    if (screen === 'CHAT_TEXT' || screen === 'CHAT_VOICE') setScreen('CATEGORY');
+    if (screen === 'CHAT_TEXT') setScreen('CATEGORY');
     else if (screen === 'CATEGORY') setScreen('MODE_SELECT');
     else if (screen === 'MODE_SELECT') setScreen('HOME');
     else setScreen('SPLASH');
@@ -32,7 +34,7 @@ function App() {
         <header className="bg-white px-6 py-5 flex items-center justify-between border-b border-slate-50 z-20">
           <div className="flex items-center gap-2">
             <SignalMedium className="text-orange-brand" size={20} />
-            <h1 className="text-orange-brand font-black text-xl tracking-tight font-outfit">Orange Assistant</h1>
+            <h1 className="text-orange-brand font-black text-xl tracking-tight font-outfit uppercase">OraVoice 24/7</h1>
           </div>
           <UserCircle2 className="text-slate-400" size={28} />
         </header>
@@ -44,20 +46,30 @@ function App() {
           {screen === 'MODE_SELECT' && (
             <ModeSelection onSelect={(s) => { 
                 setInteractionMode(s === 'CHAT_TEXT' ? 'text' : 'voice');
-                setScreen('CATEGORY'); 
+                setScreen('DASHBOARD'); 
             }} language={language} />
           )}
           
+          {screen === 'DASHBOARD' && <Dashboard />}
+          {screen === 'CLAIM' && <Claim />}
+          {screen === 'PURCHASE' && <Purchase />}
+          
           {screen === 'CATEGORY' && (
             <CategoryMenu
-              onSelectCategory={(cat) => { setSelectedCategory(cat); setInitialPrompt(cat.prompt); setScreen('CHAT_TEXT'); }}
+              onSelectCategory={(cat) => { 
+                  setSelectedCategory(cat); 
+                  setInitialPrompt(cat.prompt); 
+                  if (cat.id === 'reclamation') setScreen('CLAIM');
+                  else if (cat.id === 'credit' || cat.id === 'internet') setScreen('PURCHASE');
+                  else setScreen('CHAT_TEXT'); 
+              }}
               onVoiceMode={() => { setInteractionMode('voice'); setScreen('CHAT_TEXT'); }}
               language={language}
               interactionMode={interactionMode}
             />
           )}
 
-          {(screen === 'CHAT_TEXT' || screen === 'CHAT_VOICE') && (
+          {screen === 'CHAT_TEXT' && (
             <Chat
               language={language}
               goBack={goBack}
@@ -68,11 +80,20 @@ function App() {
           )}
         </main>
 
+        {/* Floating Robot AI Button - Présent sur toutes vos maquettes */}
+        {screen !== 'SPLASH' && screen !== 'HOME' && (
+          <button 
+            onClick={() => setScreen('CHAT_TEXT')}
+            className="fixed bottom-24 right-6 w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center shadow-2xl z-50 border border-white/10 active:scale-95 transition-transform"
+          >
+            <Bot size={28} />
+          </button>
+        )}
 
-        {/* Navigation Bar (Bottom) - Image 1 */}
+        {/* Navigation Bar (Bottom) - Image 1/2 */}
         <nav className="bg-white border-t border-slate-100 px-10 py-4 flex justify-between items-center z-20">
-          <button onClick={() => setScreen('SPLASH')} className={`nav-item ${screen === 'SPLASH' || screen === 'HOME' ? 'active' : ''}`}>
-            <div className={`p-2 rounded-xl transition-all ${screen === 'SPLASH' || screen === 'HOME' ? 'bg-orange-50' : ''}`}>
+          <button onClick={() => setScreen('DASHBOARD')} className={`nav-item ${screen === 'DASHBOARD' ? 'active' : ''}`}>
+            <div className={`p-2 rounded-xl transition-all ${screen === 'DASHBOARD' ? 'bg-orange-50' : ''}`}>
               <Home size={24} />
             </div>
             <span>Accueil</span>
@@ -83,8 +104,8 @@ function App() {
             </div>
             <span>Services</span>
           </button>
-          <button className="nav-item">
-            <div className="p-2 rounded-xl">
+          <button onClick={() => setScreen('PURCHASE')} className={`nav-item ${screen === 'PURCHASE' ? 'active' : ''}`}>
+            <div className={`p-2 rounded-xl transition-all ${screen === 'PURCHASE' ? 'bg-orange-50' : ''}`}>
               <LayoutDashboard size={24} />
             </div>
             <span>Tableau</span>
