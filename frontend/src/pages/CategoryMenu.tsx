@@ -89,15 +89,19 @@ interface Props {
   onSelectCategory: (cat: Category) => void;
   onVoiceMode: () => void;
   language: string | null;
+  interactionMode?: 'text' | 'voice';
 }
 
-export default function CategoryMenu({ onSelectCategory, onVoiceMode, language }: Props) {
+
+export default function CategoryMenu({ onSelectCategory, onVoiceMode, language, interactionMode }: Props) {
   const [isListening, setIsListening] = useState(false);
 
   useEffect(() => {
+    if (interactionMode === 'text') return; // Silence en mode message
     const msg = new SpeechSynthesisUtterance(
       'Bonjour ! Comment puis-je vous aider ? Dites le sujet de votre problème, ou cliquez sur une catégorie.'
     );
+
     msg.lang = language === 'en' ? 'en-US' : 'fr-FR';
     msg.onend = () => startListening();
     window.speechSynthesis.speak(msg);

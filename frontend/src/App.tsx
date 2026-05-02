@@ -15,7 +15,9 @@ function App() {
   const [screen, setScreen] = useState<Screen>('SPLASH');
 
   const [language, setLanguage] = useState<Language>(null);
+  const [interactionMode, setInteractionMode] = useState<'text' | 'voice'>('text');
   const [initialPrompt, setInitialPrompt] = useState<string | null>(null);
+
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
   const handleLanguageSelect = (lang: Language) => {
@@ -24,9 +26,15 @@ function App() {
   };
 
   const handleModeSelect = (mode: Screen) => {
-    if (mode === 'CHAT_TEXT') setScreen('CATEGORY');
-    else setScreen(mode);
+    if (mode === 'CHAT_TEXT') {
+      setInteractionMode('text');
+      setScreen('CATEGORY');
+    } else {
+      setInteractionMode('voice');
+      setScreen(mode);
+    }
   };
+
 
   const handleCategorySelect = (cat: Category) => {
     setSelectedCategory(cat);
@@ -84,9 +92,11 @@ function App() {
           {screen === 'CATEGORY' && (
             <CategoryMenu
               onSelectCategory={handleCategorySelect}
-              onVoiceMode={() => setScreen('CHAT_VOICE')}
+              onVoiceMode={() => { setInteractionMode('voice'); setScreen('CHAT_VOICE'); }}
               language={language}
+              interactionMode={interactionMode}
             />
+
           )}
           {screen === 'CHAT_TEXT' && (
             <Chat
@@ -94,7 +104,9 @@ function App() {
               goBack={goBack}
               initialPrompt={initialPrompt}
               category={selectedCategory}
+              interactionMode={interactionMode}
             />
+
           )}
           {screen === 'CHAT_VOICE' && <VoiceMode language={language} goBack={goBack} />}
         </main>

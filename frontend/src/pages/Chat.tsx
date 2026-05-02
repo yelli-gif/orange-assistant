@@ -8,7 +8,9 @@ interface Props {
   goBack: () => void;
   initialPrompt?: string | null;
   category?: Category | null;
+  interactionMode?: 'text' | 'voice';
 }
+
 
 interface Message {
   id: number;
@@ -22,7 +24,7 @@ const QUICK_ACTIONS = ["Mon Solde", "Pass Internet", "Orange Money", "Assistance
 
 const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : '';
 
-export default function Chat({ language, initialPrompt, category }: Props) {
+export default function Chat({ language, initialPrompt, category, interactionMode }: Props) {
   const getWelcomeMsg = () => {
     if (category) return `Bonjour ! Vous êtes dans la section **${category.label}**. Je suis là pour vous aider. Décrivez votre problème ou posez votre question.`;
     return "Bonjour ! Je suis votre Assistant Orange CI. Comment puis-je vous aider ?";
@@ -55,10 +57,12 @@ export default function Chat({ language, initialPrompt, category }: Props) {
   }, [messages, showSecurity, isTyping]);
 
   const speak = (text: string) => {
+    if (interactionMode === 'text') return; // Silence en mode message
     const msg = new SpeechSynthesisUtterance(text);
     msg.lang = language === 'en' ? 'en-US' : 'fr-FR';
     window.speechSynthesis.speak(msg);
   };
+
 
   const handleSend = async (text: string = inputText) => {
     if (!text.trim()) return;
