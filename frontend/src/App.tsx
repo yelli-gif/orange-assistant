@@ -50,9 +50,9 @@ function App() {
             }} language={language} />
           )}
           
-          {screen === 'DASHBOARD' && <Dashboard />}
-          {screen === 'CLAIM' && <Claim />}
-          {screen === 'PURCHASE' && <Purchase />}
+          {screen === 'DASHBOARD' && <Dashboard language={language} />}
+          {screen === 'CLAIM' && <Claim language={language} />}
+          {screen === 'PURCHASE' && <Purchase language={language} />}
           
           {screen === 'CATEGORY' && (
             <CategoryMenu
@@ -69,7 +69,7 @@ function App() {
             />
           )}
 
-          {screen === 'CHAT_TEXT' && (
+          {(screen === 'CHAT_TEXT' || screen === 'CHAT_VOICE') && (
             <Chat
               language={language}
               goBack={goBack}
@@ -80,15 +80,21 @@ function App() {
           )}
         </main>
 
-        {/* Floating Robot AI Button - Présent sur toutes vos maquettes */}
+        {/* Floating Robot AI Button - Vocalisé */}
         {screen !== 'SPLASH' && screen !== 'HOME' && (
           <button 
             onClick={() => setScreen('CHAT_TEXT')}
-            className="fixed bottom-24 right-6 w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center shadow-2xl z-50 border border-white/10 active:scale-95 transition-transform"
+            onMouseEnter={() => {
+                const msg = new SpeechSynthesisUtterance("Cliquez ici pour me parler");
+                msg.lang = 'fr-FR';
+                window.speechSynthesis.speak(msg);
+            }}
+            className="fixed bottom-24 right-6 w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center shadow-2xl z-50 border border-white/10 active:scale-95 transition-transform animate-bounce"
           >
             <Bot size={28} />
           </button>
         )}
+
 
         {/* Navigation Bar (Bottom) - Image 1/2 */}
         <nav className="bg-white border-t border-slate-100 px-10 py-4 flex justify-between items-center z-20">
