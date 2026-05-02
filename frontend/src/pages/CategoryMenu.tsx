@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  SimCard, CreditCard, Wifi, Wallet, Receipt, Home, ShieldCheck,
+  Phone, CreditCard, Wifi, Wallet, Receipt, Home, ShieldCheck,
   AlertCircle, Smartphone, Building2, Info, ChevronRight, Mic
 } from 'lucide-react';
 
@@ -19,7 +19,7 @@ export interface Category {
 export const CATEGORIES: Category[] = [
   {
     id: 'sim', label: 'Carte SIM & Ligne', emoji: '📱',
-    icon: <SimCard size={24} />, description: 'PUK, PIN, remplacement, identification',
+    icon: <Phone size={24} />, description: 'PUK, PIN, remplacement, identification',
     color: 'text-violet-700', borderColor: 'border-violet-200', iconBg: 'bg-violet-50',
     prompt: 'Je veux de l\'aide avec ma carte SIM'
   },

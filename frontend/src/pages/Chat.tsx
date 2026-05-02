@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Mic, Send, Volume2, KeyRound, PhoneCall, ShieldAlert, CheckCircle2, Fingerprint, Lock } from 'lucide-react';
 import type { Language } from '../App';
 import type { Category } from './CategoryMenu';
@@ -22,7 +22,7 @@ const QUICK_ACTIONS = ["Mon Solde", "Pass Internet", "Orange Money", "Assistance
 
 const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : '';
 
-export default function Chat({ language, goBack, initialPrompt, category }: Props) {
+export default function Chat({ language, initialPrompt, category }: Props) {
   const getWelcomeMsg = () => {
     if (category) return `Bonjour ! Vous êtes dans la section **${category.label}**. Je suis là pour vous aider. Décrivez votre problème ou posez votre question.`;
     return "Bonjour ! Je suis votre Assistant Orange CI. Comment puis-je vous aider ?";

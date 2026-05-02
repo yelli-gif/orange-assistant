@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Mic, Headphones, Wallet, Wifi, PhoneCall, ShieldAlert } from 'lucide-react';
 import type { Language } from '../App';
 
@@ -9,7 +9,7 @@ interface Props {
   goBack: () => void;
 }
 
-export default function VoiceMode({ language, goBack }: Props) {
+export default function VoiceMode({ language }: Props) {
   const [isListening, setIsListening] = useState(false);
   const [visualState, setVisualState] = useState<'idle' | 'listening' | 'speaking' | 'balance' | 'pass' | 'transfer' | 'security'>('speaking');
 

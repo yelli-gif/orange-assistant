@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MessageSquare, Mic } from 'lucide-react';
 import type { Screen } from '../App';
 
