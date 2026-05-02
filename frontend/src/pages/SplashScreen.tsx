@@ -1,4 +1,4 @@
-import { Mic, Zap } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 interface Props {
   onStart: () => void;
@@ -6,44 +6,43 @@ interface Props {
 
 export default function SplashScreen({ onStart }: Props) {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-12 animate-fade-in bg-white relative">
-      {/* Cercles décoratifs */}
-      <div className="absolute top-[-10%] left-[-10%] w-64 h-64 bg-orange-50 rounded-full blur-3xl opacity-60"></div>
-      <div className="absolute bottom-[-5%] right-[-5%] w-48 h-48 bg-orange-50 rounded-full blur-2xl opacity-60"></div>
+    <div className="flex-1 flex flex-col items-center justify-between p-10 bg-white animate-fade-in relative overflow-hidden">
+      {/* Background Subtle Accent */}
+      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-slate-50 rounded-bl-[100px] -z-10"></div>
+      
+      <div className="w-full"></div>
 
-      <div className="flex flex-col items-center space-y-6 relative">
-        <div className="w-32 h-32 bg-orange-brand rounded-[2.5rem] flex items-center justify-center shadow-2xl rotate-3 transform transition-transform hover:rotate-0">
-          <span className="text-white font-black text-6xl select-none">O</span>
+      <div className="flex flex-col items-center space-y-12 w-full max-w-xs">
+        {/* Logo Minimaliste */}
+        <div className="relative group">
+          <div className="absolute -inset-4 bg-orange-brand/5 rounded-full blur-2xl group-hover:bg-orange-brand/10 transition-all duration-500"></div>
+          <div className="w-24 h-24 bg-black text-white rounded-2xl flex items-center justify-center shadow-2xl relative">
+            <span className="font-outfit font-black text-5xl leading-none">O</span>
+          </div>
         </div>
         
-        <div className="text-center space-y-2">
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-            Orange Assistant
+        <div className="text-center space-y-4">
+          <h2 className="text-4xl font-outfit font-black text-slate-900 tracking-tight leading-tight">
+            Innovation <br/> & Inclusion.
           </h2>
-          <p className="text-slate-500 font-medium text-sm px-4">
-            Votre assistant virtuel 24h/24, accessible par la voix ou par texte.
+          <div className="h-1 w-12 bg-orange-brand mx-auto rounded-full"></div>
+          <p className="text-slate-500 font-medium text-sm leading-relaxed">
+            L'assistant nouvelle génération d'Orange CI, pensé pour chaque Ivoirien.
           </p>
         </div>
       </div>
 
-      <div className="w-full space-y-4 relative">
+      <div className="w-full space-y-6">
         <button 
           onClick={onStart}
-          className="w-full bg-orange-brand hover:bg-orange-600 active:scale-95 text-white py-5 px-8 rounded-2xl font-bold text-xl transition-all duration-200 shadow-xl shadow-orange-brand/20 flex items-center justify-center gap-3"
+          className="w-full bg-slate-900 border border-slate-800 hover:bg-black text-white py-5 px-8 rounded-xl font-bold text-lg transition-all duration-300 shadow-2xl flex items-center justify-center gap-3 group"
         >
-          <Zap size={24} fill="currentColor" />
-          COMMENCER
+          COMMENCER L'EXPÉRIENCE
+          <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
         </button>
-
-        <div className="flex items-center justify-center gap-6 pt-4 text-slate-400">
-          <div className="flex items-center gap-1.5">
-            <Mic size={16} />
-            <span className="text-xs font-semibold">Parlez-moi</span>
-          </div>
-          <div className="w-1 h-1 bg-slate-300 rounded-full"></div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs font-semibold underline">Inclusif</span>
-          </div>
+        
+        <div className="flex items-center justify-center gap-2 text-slate-300">
+          <span className="text-[10px] uppercase font-black tracking-[0.2em]">Orange Côte d'Ivoire</span>
         </div>
       </div>
     </div>

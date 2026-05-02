@@ -18,72 +18,55 @@ export interface Category {
 
 export const CATEGORIES: Category[] = [
   {
-    id: 'sim', label: 'Carte SIM & Ligne', emoji: '📱',
-    icon: <Phone size={24} />, description: 'PUK, PIN, remplacement, identification',
-    color: 'text-violet-700', borderColor: 'border-violet-200', iconBg: 'bg-violet-50',
-    prompt: 'Je veux de l\'aide avec ma carte SIM'
+    id: 'sim', label: 'CARTE SIM & LIGNE', emoji: '',
+    icon: <Phone size={20} strokeWidth={1.5} />, description: 'Identité, PUK, code PIN...',
+    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
+    prompt: 'Aide-moi avec ma ligne mobile'
   },
   {
-    id: 'credit', label: 'Crédit & Forfaits', emoji: '💳',
-    icon: <CreditCard size={24} />, description: 'Solde, recharge, offres, numéros préférés',
-    color: 'text-blue-700', borderColor: 'border-blue-200', iconBg: 'bg-blue-50',
-    prompt: 'Consulter mon solde'
+    id: 'credit', label: 'CRÉDIT & FORFAITS', emoji: '',
+    icon: <CreditCard size={20} strokeWidth={1.5} />, description: 'Solde et rechargement',
+    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
+    prompt: 'Consulter mon crédit'
   },
   {
-    id: 'internet', label: 'Internet Mobile', emoji: '📶',
-    icon: <Wifi size={24} />, description: 'Pass internet, solde Data, configuration',
-    color: 'text-sky-700', borderColor: 'border-sky-200', iconBg: 'bg-sky-50',
-    prompt: 'Je veux acheter un pass internet'
+    id: 'orange_money', label: 'ORANGE MONEY', emoji: '',
+    icon: <Wallet size={20} strokeWidth={1.5} />, description: 'Paiements et transferts',
+    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
+    prompt: 'Transfert d\'argent'
   },
   {
-    id: 'orange_money', label: 'Orange Money', emoji: '💰',
-    icon: <Wallet size={24} />, description: 'Transferts, compte, arnaques, dépôt/retrait',
-    color: 'text-orange-700', borderColor: 'border-orange-200', iconBg: 'bg-orange-50',
-    prompt: 'Je veux transférer de l\'argent'
+    id: 'internet', label: 'INTERNET MOBILE', emoji: '',
+    icon: <Wifi size={20} strokeWidth={1.5} />, description: 'Pass 4G/5G et Data',
+    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
+    prompt: 'Acheter pass internet'
   },
   {
-    id: 'facture', label: 'Factures', emoji: '🧾',
-    icon: <Receipt size={24} />, description: 'Obtenir, payer ou contester une facture',
-    color: 'text-amber-700', borderColor: 'border-amber-200', iconBg: 'bg-amber-50',
-    prompt: 'Je veux payer ma facture'
+    id: 'domicile', label: 'INTERNET DOMICILE', emoji: '',
+    icon: <Home size={20} strokeWidth={1.5} />, description: 'Fibre et Flybox',
+    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
+    prompt: 'Aide internet maison'
   },
   {
-    id: 'domicile', label: 'Internet Domicile', emoji: '🏠',
-    icon: <Home size={24} />, description: 'Fibre, Flybox, 4G Home, box, panne',
-    color: 'text-green-700', borderColor: 'border-green-200', iconBg: 'bg-green-50',
-    prompt: 'Je veux de l\'aide avec ma box internet à la maison'
+    id: 'facture', label: 'FACTURES', emoji: '',
+    icon: <Receipt size={20} strokeWidth={1.5} />, description: 'CIE, SODECI, Canal+',
+    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
+    prompt: 'Payer une facture'
   },
   {
-    id: 'securite', label: 'Sécurité & Arnaques', emoji: '🔒',
-    icon: <ShieldCheck size={24} />, description: 'Bloquer compte, fraude, protection',
-    color: 'text-red-700', borderColor: 'border-red-200', iconBg: 'bg-red-50',
-    prompt: 'Je veux signaler une arnaque Orange Money'
+    id: 'securite', label: 'SÉCURITÉ', emoji: '',
+    icon: <ShieldCheck size={20} strokeWidth={1.5} />, description: 'Signaler une fraude',
+    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
+    prompt: 'Problème de sécurité'
   },
   {
-    id: 'reclamation', label: 'Réclamations', emoji: '⚠️',
-    icon: <AlertCircle size={24} />, description: 'Problème non résolu, remboursement, plainte',
-    color: 'text-rose-700', borderColor: 'border-rose-200', iconBg: 'bg-rose-50',
-    prompt: 'Je veux faire une réclamation'
-  },
-  {
-    id: 'maxit', label: 'Max it & Digital', emoji: '📲',
-    icon: <Smartphone size={24} />, description: 'Application Max it, eSIM, services digitaux',
-    color: 'text-indigo-700', borderColor: 'border-indigo-200', iconBg: 'bg-indigo-50',
-    prompt: 'Je veux de l\'aide avec l\'application Max it'
-  },
-  {
-    id: 'entreprise', label: 'Entreprises', emoji: '🏢',
-    icon: <Building2 size={24} />, description: 'Fibre pro, flotte, cloud, devenir distributeur',
-    color: 'text-slate-700', borderColor: 'border-slate-200', iconBg: 'bg-slate-50',
-    prompt: 'Je veux des informations sur les offres entreprises'
-  },
-  {
-    id: 'info', label: 'Info & Orientation', emoji: '📞',
-    icon: <Info size={24} />, description: 'Agences, horaires, tarifs, rendez-vous',
-    color: 'text-teal-700', borderColor: 'border-teal-200', iconBg: 'bg-teal-50',
-    prompt: 'Où sont les agences Orange et quels sont les horaires ?'
+    id: 'reclamation', label: 'RÉCLAMATIONS', emoji: '',
+    icon: <AlertCircle size={20} strokeWidth={1.5} />, description: 'Dépôt de plainte',
+    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
+    prompt: 'Faire une réclamation'
   },
 ];
+
 
 interface Props {
   onSelectCategory: (cat: Category) => void;
@@ -131,52 +114,45 @@ export default function CategoryMenu({ onSelectCategory, onVoiceMode, language, 
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-50">
-      {/* Sous-titre + indicateur micro */}
-      <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-        <p className="text-sm font-semibold text-slate-600">Comment puis-je vous aider ?</p>
-        {isListening ? (
-          <span className="flex items-center gap-1.5 text-red-500 bg-red-50 px-3 py-1 rounded-full text-xs font-bold animate-pulse border border-red-200">
-            <Mic size={12} /> Je vous écoute...
-          </span>
-        ) : (
-          <button onClick={startListening} className="flex items-center gap-1.5 text-orange-700 bg-orange-50 px-3 py-1 rounded-full text-xs font-bold border border-orange-200 hover:bg-orange-100 transition-colors">
-            <Mic size={12} /> Parler
-          </button>
-        )}
+    <div className="flex-1 flex flex-col p-8 bg-white overflow-hidden h-full">
+      <div className="mb-8 space-y-2">
+        <h2 className="text-3xl font-outfit font-black text-slate-900 tracking-tight text-center md:text-left">
+          SERVICES
+        </h2>
+        <p className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] text-center md:text-left">
+          Plateforme d'assistance officielle
+        </p>
       </div>
 
-      {/* Grille de catégories */}
-      <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
-        {CATEGORIES.map(cat => (
-          <button
-            key={cat.id}
-            onClick={() => onSelectCategory(cat)}
-            className={`w-full flex items-center gap-4 bg-white border-2 ${cat.borderColor} hover:shadow-md p-4 rounded-2xl text-left transition-all duration-200 group`}
-          >
-            <div className={`${cat.iconBg} ${cat.color} p-3 rounded-xl flex-shrink-0`}>
-              {cat.icon}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-slate-800 text-sm">{cat.emoji} {cat.label}</span>
+      <div className="flex-1 overflow-y-auto pr-2 pb-10">
+        <div className="grid grid-cols-2 gap-4">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => onSelectCategory(cat)}
+              className="flex flex-col items-center p-6 bg-white border border-slate-100 rounded-2xl hover:border-slate-300 hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-300 group text-center"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-slate-50 group-hover:bg-orange-brand/5 flex items-center justify-center mb-4 transition-colors text-slate-400 group-hover:text-orange-brand">
+                {cat.icon}
               </div>
-              <p className="text-xs text-slate-500 mt-0.5 truncate">{cat.description}</p>
-            </div>
-            <ChevronRight size={18} className="text-slate-300 group-hover:text-orange-brand transition-colors flex-shrink-0" />
-          </button>
-        ))}
+              <span className="font-bold text-slate-900 text-[10px] leading-tight mb-1 uppercase tracking-wider">{cat.label}</span>
+              <span className="text-[9px] text-slate-400 font-medium leading-tight">{cat.description}</span>
+            </button>
+          ))}
+        </div>
       </div>
-
-      {/* Bouton mode vocal */}
-      <div className="p-4 border-t border-slate-200 bg-white">
-        <button
+      
+      {/* Mode Vocal Flottant Pro */}
+      <div className="pt-6 border-t border-slate-50">
+        <button 
           onClick={onVoiceMode}
-          className="w-full flex items-center justify-center gap-3 bg-orange-brand text-white font-bold py-4 rounded-2xl hover:bg-orange-600 transition-colors shadow-lg shadow-orange-brand/30"
+          className="w-full bg-black text-white py-5 rounded-xl font-bold text-[11px] tracking-widest uppercase shadow-2xl hover:bg-slate-900 transition-all flex items-center justify-center gap-3"
         >
-          <Mic size={22} /> Utiliser l'assistant vocal
+          <Mic size={18} />
+          Accès rapide vocal
         </button>
       </div>
     </div>
   );
 }
+

@@ -18,9 +18,8 @@ export default function VoiceMode({ language, goBack }: Props) {
   const recognition = SpeechRecognition ? new SpeechRecognition() : null;
 
   useEffect(() => {
-    // Message de bienvenue initial
     const timer = setTimeout(() => {
-      speakAndSetState("Akwaba ! Je vous écoute. Appuyez sur le micro pour me parler.", 'idle');
+      speakAndSetState("Assistant vocal activé. Je vous écoute.", 'idle');
     }, 500);
     return () => clearTimeout(timer);
   }, []);
@@ -36,189 +35,111 @@ export default function VoiceMode({ language, goBack }: Props) {
 
   const handleVoiceCommand = async (text: string) => {
     setVisualState('speaking');
-    
     try {
       const response = await fetch(`${API_BASE}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, language })
       });
       const data = await response.json();
-
       let nextVis = 'idle';
       if (data.category === 'simple') {
         if (text.toLowerCase().includes('solde')) nextVis = 'balance';
-        if (text.toLowerCase().includes('pass') || text.toLowerCase().includes('internet')) nextVis = 'pass';
-      } else if (data.category === 'complexe') {
-        nextVis = 'transfer';
-      } else if (data.category === 'sensible') {
-        nextVis = 'security';
-      }
-
+        if (text.toLowerCase().includes('pass')) nextVis = 'pass';
+      } else if (data.category === 'complexe') nextVis = 'transfer';
+      else if (data.category === 'sensible') nextVis = 'security';
       speakAndSetState(data.reply, nextVis);
-      setTranscript(""); // Reset après réponse
-
+      setTranscript("");
     } catch (err) {
-      speakAndSetState("Désolé, il y a un petit souci technique. Réessayez.", 'idle');
+      speakAndSetState("Erreur de connexion.", 'idle');
     }
   };
 
   const toggleListen = () => {
-    if (!recognition) {
-      speakAndSetState("Désolé, je ne peux pas utiliser le micro sur ce téléphone.", 'idle');
-      return;
-    }
-    
-    if (isListening) {
-      recognition.stop();
-      setIsListening(false);
-      setVisualState('idle');
-    } else {
+    if (!recognition) return;
+    if (isListening) { recognition.stop(); setIsListening(false); setVisualState('idle'); }
+    else {
       window.speechSynthesis.cancel();
       recognition.lang = language === 'en' ? 'en-US' : 'fr-FR';
-      recognition.continuous = false;
-      recognition.interimResults = true;
       recognition.start();
       setIsListening(true);
       setVisualState('listening');
-
-      recognition.onresult = (event: any) => {
-        const current = event.results[0][0].transcript;
-        setTranscript(current);
-        if (event.results[0].isFinal) {
-          setIsListening(false);
-          handleVoiceCommand(current);
-        }
+      recognition.onresult = (e: any) => {
+        const c = e.results[0][0].transcript;
+        setTranscript(c);
+        if (e.results[0].isFinal) { setIsListening(false); handleVoiceCommand(c); }
       };
-
-      recognition.onerror = () => {
-        setIsListening(false);
-        setVisualState('idle');
-      };
-    }
-  };
-
-  const renderVisual = () => {
-    switch (visualState) {
-      case 'idle':
-        return (
-          <div className="flex flex-col items-center animate-fade-in space-y-6">
-            <div className="w-48 h-48 bg-slate-100 rounded-full flex items-center justify-center border-4 border-white shadow-inner">
-              <Headphones size={80} className="text-slate-300" />
-            </div>
-            <p className="text-lg font-bold text-slate-400">Je vous attends...</p>
-          </div>
-        );
-      case 'listening':
-        return (
-          <div className="flex flex-col items-center space-y-8 h-full justify-center w-full">
-            <div className="relative">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-red-500/20 rounded-full animate-ping"></div>
-              <div className="relative w-32 h-32 bg-red-500 rounded-full flex items-center justify-center shadow-2xl shadow-red-500/40 z-10">
-                <Mic size={54} className="text-white" />
-              </div>
-            </div>
-            <div className="px-6 text-center max-w-xs">
-              <p className="text-3xl font-black text-slate-900 leading-tight break-words animate-pulse">
-                {transcript || "Parlez maintenant"}
-              </p>
-            </div>
-          </div>
-        );
-      case 'speaking':
-        return (
-          <div className="relative flex flex-col items-center space-y-10">
-            <div className="flex items-center gap-1.5 h-20">
-              {[1, 2, 3, 4, 5, 4, 3, 2, 1].map((h, i) => (
-                <div key={i} className="w-1.5 bg-orange-brand rounded-full animate-bounce" style={{ height: `${h * 15}px`, animationDelay: `${i * 0.1}s` }}></div>
-              ))}
-            </div>
-            <div className="w-40 h-40 bg-orange-brand rounded-full flex items-center justify-center shadow-2xl shadow-orange-brand/50 border-8 border-orange-50">
-               <span className="text-white font-black text-7xl">O</span>
-            </div>
-          </div>
-        );
-      case 'balance':
-        return (
-          <div className="text-center animate-bounce flex flex-col items-center">
-            <div className="w-32 h-32 bg-green-50 rounded-3xl flex items-center justify-center mb-6 border-2 border-green-100">
-               <Wallet size={64} className="text-green-600" />
-            </div>
-            <h1 className="text-7xl font-black text-slate-900">4500<span className="text-3xl ml-1">F</span></h1>
-          </div>
-        );
-      case 'pass':
-        return (
-          <div className="text-center animate-fade-in flex flex-col items-center">
-            <div className="w-32 h-32 bg-blue-50 rounded-3xl flex items-center justify-center mb-6 border-2 border-blue-100">
-               <Wifi size={64} className="text-blue-600" />
-            </div>
-            <h1 className="text-7xl font-black text-slate-900">1<span className="text-3xl ml-1">Go</span></h1>
-          </div>
-        );
-      case 'transfer':
-        return (
-          <div className="flex flex-col items-center space-y-4 text-green-600">
-            <div className="w-32 h-32 bg-green-50 rounded-full flex items-center justify-center animate-pulse border-4 border-green-200">
-              <PhoneCall size={64} />
-            </div>
-            <p className="font-bold">Appel en cours...</p>
-          </div>
-        );
-      case 'security':
-        return (
-          <div className="flex flex-col items-center space-y-4 text-amber-600">
-            <div className="w-32 h-32 bg-amber-50 rounded-full flex items-center justify-center animate-pulse border-4 border-amber-200">
-              <ShieldAlert size={64} />
-            </div>
-            <p className="font-bold">Vérification...</p>
-          </div>
-        );
-      default:
-        return null;
+      recognition.onerror = () => { setIsListening(false); setVisualState('idle'); };
     }
   };
 
   return (
-    <div className="flex flex-col h-full bg-white relative overflow-hidden">
-      {/* Bouton de sortie discret mais accessible */}
-      <button 
-        onClick={goBack} 
-        className="absolute top-6 right-6 p-2 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-full z-20 transition-colors"
-      >
-        <X size={24} />
-      </button>
+    <div className="flex flex-col h-full bg-slate-950 text-white relative overflow-hidden">
+      {/* HUD de status Ultra Tech */}
+      <div className="p-8 flex justify-between items-center z-10">
+         <div className="flex items-center gap-3">
+            <div className="w-2 h-2 bg-orange-brand rounded-full animate-pulse shadow-[0_0_10px_#FF7900]"></div>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">System Active</span>
+         </div>
+         <button onClick={goBack} className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-400 hover:text-white">
+            <X size={20} />
+         </button>
+      </div>
 
-      {/* Zone de Langue Locales Indicator */}
-      <div className="absolute top-8 left-8 flex items-center gap-2">
-        <div className="px-3 py-1 bg-orange-50 text-orange-700 text-[10px] font-black rounded-full border border-orange-100 uppercase tracking-widest">
-          {language}
+      <div className="flex-1 flex flex-col items-center justify-center px-10 relative">
+        {/* Background Visual Effects */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-brand/5 rounded-full blur-[100px]"></div>
+        
+        <div className="w-full h-80 flex flex-col items-center justify-center space-y-12 z-10">
+          {visualState === 'listening' ? (
+            <div className="flex flex-col items-center space-y-12">
+               <div className="flex items-end gap-1.5 h-16">
+                  {[1,2,3,4,3,2,3,4,5,2,1].map((h, i) => (
+                    <div key={i} className="w-1 bg-red-500 rounded-full animate-bounce" style={{height: `${h*12}px`, animationDelay: `${i*0.05}s`}}></div>
+                  ))}
+               </div>
+               <p className="text-2xl font-outfit font-black text-center max-w-xs leading-tight uppercase tracking-tight">
+                {transcript || "Écoute en cours..."}
+               </p>
+            </div>
+          ) : visualState === 'speaking' ? (
+            <div className="flex flex-col items-center space-y-8">
+               <div className="flex items-center gap-1 h-32">
+                  {[1,2,3,2,1,2,3,2,1].map((h, i) => (
+                    <div key={i} className="w-2 bg-orange-brand rounded-full animate-pulse" style={{height: `${h*30}px`, animationDelay: `${i*0.1s}`}}></div>
+                  ))}
+               </div>
+               <div className="w-20 h-20 bg-white text-black rounded-2xl flex items-center justify-center font-black text-4xl shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+                  O
+               </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center space-y-6">
+               <div className="w-40 h-40 border border-white/10 rounded-full flex items-center justify-center relative">
+                  <div className="absolute inset-4 border border-white/5 rounded-full animate-spin-slow"></div>
+                  <Headphones size={48} className="text-white/20" />
+               </div>
+               <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Prêt pour commande</p>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-10">
-        <div className="w-full h-[400px] flex items-center justify-center">
-          {renderVisual()}
-        </div>
-      </div>
-
-      {/* Le Micro Gigantesque */}
-      <div className="pb-16 pt-8 flex justify-center">
+      {/* Control Bar */}
+      <div className="pb-20 pt-10 flex flex-col items-center space-y-6 z-10">
         <button 
           onClick={toggleListen}
-          className={`group w-40 h-40 rounded-full flex items-center justify-center transition-all duration-300 relative ${
+          className={`w-32 h-32 rounded-full flex items-center justify-center transition-all duration-500 ${
             isListening 
-              ? 'bg-red-500 scale-110 shadow-[0_0_50px_rgba(239,68,68,0.4)]' 
-              : 'bg-orange-brand hover:scale-105 shadow-[0_20px_50px_rgba(255,121,0,0.3)]'
+              ? 'bg-red-600 shadow-[0_0_60px_#dc2626] scale-110' 
+              : 'bg-white text-black shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:scale-105'
           }`}
         >
-          {isListening ? (
-             <div className="absolute w-full h-full rounded-full border-4 border-white/30 animate-ping"></div>
-          ) : null}
-          <Mic size={72} className="text-white z-10 group-active:scale-90 transition-transform" />
+          <Mic size={48} />
         </button>
+        <div className="px-6 py-2 bg-white/5 rounded-full border border-white/10">
+           <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">Interaction mains-libres</span>
+        </div>
       </div>
     </div>
   );
 }
-

@@ -59,29 +59,33 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900 flex flex-col items-center justify-center p-4 font-sans">
-      <div className="w-full max-w-md bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] relative h-[90vh] flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center justify-center p-0 md:p-4 font-sans selection:bg-orange-brand/20">
+      <div className="w-full max-w-md bg-white md:rounded-[2rem] overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] relative h-screen md:h-[90vh] flex flex-col border border-slate-100">
         
-        {/* Header Officiel Orange */}
-        <header className="bg-orange-brand px-5 py-4 flex items-center justify-between shadow-sm z-10 flex-shrink-0">
+        {/* Header Ultra Minimaliste */}
+        <header className="px-6 py-6 flex items-center justify-between z-10 flex-shrink-0 bg-white border-b border-slate-50">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-white text-orange-brand rounded-xl flex items-center justify-center font-black text-2xl shadow-sm leading-none">
+            <div className="w-9 h-9 bg-black text-white rounded flex items-center justify-center font-bold text-xl leading-none">
               O
             </div>
             <div>
-              <h1 className="font-bold text-lg text-white tracking-wide leading-tight">Orange CI</h1>
-              <p className="text-white/80 text-[11px] font-medium">{getHeaderSubtitle()}</p>
+              <h1 className="font-outfit font-black text-lg tracking-tight text-slate-900">ORANGE ASSISTANT</h1>
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 bg-orange-brand rounded-full animate-pulse"></div>
+                <p className="text-slate-400 text-[10px] uppercase font-bold tracking-widest">{getHeaderSubtitle()}</p>
+              </div>
             </div>
           </div>
-          {screen !== 'HOME' && (
+          {screen !== 'SPLASH' && (
             <button
               onClick={goBack}
-              className="text-sm font-semibold text-white/90 hover:text-white bg-white/20 px-3 py-1.5 rounded-full transition-colors"
+              className="text-[11px] font-bold text-slate-400 hover:text-slate-900 bg-slate-50 px-3 py-1.5 rounded transition-all uppercase tracking-wider"
             >
-              ← Retour
+              Retour
             </button>
           )}
         </header>
+
 
         {/* Contenu principal */}
         <main className="flex-1 overflow-hidden flex flex-col">
