@@ -159,5 +159,33 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const result = detectTopic(message);
-  return res.status(200).json({ reply: result.reply, category: result.category, topic: result.topic });
+  
+  // Simulation de données riches pour la démo
+  let visual = null;
+  let actions = [];
+
+  if (result.topic === 'sim' && message.toLowerCase().includes('puk')) {
+    visual = "https://www.orange.ci/media/puk_guide.png"; // Image illustrative
+  }
+
+  if (result.topic === 'credit') {
+    actions.push({ label: "Recharger sur Max it", type: "maxit", url: "https://maxit.orange.ci/recharge" });
+  }
+
+  if (result.category === 'complexe') {
+    actions.push({ label: "Parler à un agent (WhatsApp)", type: "whatsapp", url: "https://wa.me/2250707070707" });
+  }
+
+  if (result.topic === 'orange_money') {
+    actions.push({ label: "Ouvrir mon compte", type: "maxit", url: "https://maxit.orange.ci/om" });
+  }
+
+  return res.status(200).json({ 
+    reply: result.reply, 
+    category: result.category, 
+    topic: result.topic,
+    visual,
+    actions
+  });
 }
+

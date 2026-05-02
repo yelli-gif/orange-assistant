@@ -17,8 +17,11 @@ interface Message {
   text: string;
   sender: 'user' | 'bot';
   category?: 'simple' | 'sensible' | 'complexe' | 'success';
+  visual?: string | null;
+  actions?: Array<{ label: string, type: string, url: string }> | null;
   timestamp: string;
 }
+
 
 const QUICK_ACTIONS = ["Mon Solde", "Pass Internet", "Orange Money", "Assistance réseau"];
 
@@ -91,8 +94,11 @@ export default function Chat({ language, initialPrompt, category, interactionMod
         text: data.reply,
         sender: 'bot',
         category: data.category,
+        visual: data.visual,
+        actions: data.actions,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
+
 
       setIsTyping(false);
       setMessages(prev => [...prev, botMsg]);
@@ -211,6 +217,36 @@ export default function Chat({ language, initialPrompt, category, interactionMod
                   </button>
                 )}
               </div>
+
+              {/* Visuel Riche */}
+              {msg.visual && (
+                <div className="mt-3 rounded-xl overflow-hidden border border-slate-100 shadow-sm">
+                  <img src={msg.visual} alt="Instruction visuelle" className="w-full h-auto" />
+                </div>
+              )}
+
+              {/* Boutons d'actions Riches */}
+              {msg.actions && msg.actions.length > 0 && (
+                <div className="mt-4 flex flex-col gap-2">
+                  {msg.actions.map((act, i) => (
+                    <a 
+                      key={i} 
+                      href={act.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold transition-all shadow-sm ${
+                        act.type === 'maxit' 
+                          ? 'bg-slate-900 text-white hover:bg-black' 
+                          : 'bg-[#25D366] text-white hover:bg-[#128C7E]'
+                      }`}
+                    >
+                      {act.type === 'maxit' && <span className="w-5 h-5 bg-white text-orange-brand rounded flex items-center justify-center text-[10px] font-black">O</span>}
+                      {act.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+
               
               {msg.category === 'sensible' && (
                 <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-amber-700 bg-amber-50 p-2 rounded-lg border border-amber-200">
