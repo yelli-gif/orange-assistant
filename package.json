@@ -1,0 +1,14 @@
+{
+  "name": "orange-assistant-root",
+  "version": "1.0.0",
+  "description": "Root project to start frontend and backend",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev": "npx concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npx ts-node --project backend/tsconfig.json backend/src/index.ts"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
