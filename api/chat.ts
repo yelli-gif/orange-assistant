@@ -2,13 +2,52 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-function detectTopic(msg: string) {
+function detectTopic(msg: string, lang: string) {
   const m = msg.toLowerCase();
+  
+  // Système de traduction simplifiée pour la démo
+  const translations: any = {
+    dioula: {
+      welcome: "A ni sé ! Assistant Orange lo. Moun bè sé ka i dèmè ?",
+      puk: "I ka code PUK sôrô yôrô ye #123# lo. A ni sôrô dèmè ?",
+      credit: "I ka fǎng (crédit) bè 4 500 FCFA lo. I bè mogo dèmè ?",
+      general: "I ka moun fǎng (problème) bè ? N'bè i dèmè."
+    },
+    baoule: {
+      welcome: "Mo ! Assistant Orange o. Nzu yɛ n kwla yo m man wɔ ?",
+      puk: "Sɛ a klo a sika code PUK o, kpan #123#. Nzu ekun ?",
+      credit: "O sika (crédit) ti 4 500 FCFA. A klo kɛ un uka wɔ ?",
+      general: "Nzu yɛ o yo wɔ o ? N'ti uka wɔ."
+    },
+    nouchi: {
+      welcome: "Y'a quoi ! C'est ton Assistant Orange. On dit quoi ?",
+      puk: "Pour ton PUK là, tape seulement #123# mon kôrô. C'est propre ?",
+      credit: "Il te reste 4 500 balles sur ton compte. On recharge ?",
+      general: "C'est quel gawa tu as ? Je vais te dja (aider)."
+    },
+    en: {
+      welcome: "Hello! I am your Orange Assistant. How can I help you?",
+      puk: "To get your PUK code, dial **#123#**. Need more help?",
+      credit: "Your balance is 4,500 FCFA. Want to top up?",
+      general: "What is your issue today? I'm here to help."
+    }
+  };
 
+  // Logique de réponse (priorité aux langues locales si sélectionnées)
+  if (lang !== 'fr' && translations[lang]) {
+    const t = translations[lang];
+    if (m.includes('puk')) return { topic: 'sim', category: 'sensible', reply: t.puk };
+    if (m.includes('solde') || m.includes('credit')) return { topic: 'credit', category: 'simple', reply: t.credit };
+    if (m.includes('bienvenue') || m.includes('bonjour') || m.includes('start')) return { topic: 'info', category: 'simple', reply: t.welcome };
+    return { topic: 'general', category: 'simple', reply: t.general };
+  }
+
+  // --- LOGIQUE FRANÇAISE (EXISTANTE) ---
   // ─── CARTE SIM ──────────────────────────────────────────────────────────
   if (m.includes('puk') || m.includes('p u k')) {
     return { topic: 'sim', category: 'sensible', reply: "Pour récupérer votre code PUK, composez le **#123#** ou appelez le **900** gratuitement. Vous pouvez aussi vous rendre en agence avec votre pièce d'identité. Souhaitez-vous que je contacte un conseiller ?" };
   }
+
   if (m.includes('pin') || m.includes('code pin')) {
     return { topic: 'sim', category: 'simple', reply: "Pour débloquer votre code PIN, composez votre code PUK suivi de votre nouveau PIN (2 fois). Composez **#123#** puis suivez les instructions. Avez-vous votre code PUK sous la main ?" };
   }
@@ -153,12 +192,13 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Méthode non autorisée' });
   }
 
-  const { message } = req.body;
+  const { message, language } = req.body;
   if (!message) {
     return res.status(400).json({ error: 'Message requis' });
   }
 
-  const result = detectTopic(message);
+  const result = detectTopic(message, language || 'fr');
+
   
   // Simulation de données riches pour la démo
   let visual = null;
