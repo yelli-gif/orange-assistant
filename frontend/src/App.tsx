@@ -4,12 +4,16 @@ import ModeSelection from './pages/ModeSelection';
 import CategoryMenu, { type Category } from './pages/CategoryMenu';
 import Chat from './pages/Chat';
 import VoiceMode from './pages/VoiceMode';
+import SplashScreen from './pages/SplashScreen';
+
 
 export type Language = 'fr' | 'nouchi' | 'dioula' | 'baoule' | 'en' | null;
-export type Screen = 'HOME' | 'MODE_SELECT' | 'CATEGORY' | 'CHAT_TEXT' | 'CHAT_VOICE';
+export type Screen = 'SPLASH' | 'HOME' | 'MODE_SELECT' | 'CATEGORY' | 'CHAT_TEXT' | 'CHAT_VOICE';
+
 
 function App() {
-  const [screen, setScreen] = useState<Screen>('HOME');
+  const [screen, setScreen] = useState<Screen>('SPLASH');
+
   const [language, setLanguage] = useState<Language>(null);
   const [initialPrompt, setInitialPrompt] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -34,7 +38,9 @@ function App() {
     if (screen === 'CATEGORY') return 'Choisissez votre sujet';
     if (screen === 'CHAT_TEXT' && selectedCategory) return selectedCategory.emoji + ' ' + selectedCategory.label;
     if (screen === 'CHAT_VOICE') return '🎙️ Mode Vocal';
+    if (screen === 'SPLASH') return 'Bienvenue';
     return 'Assistant Universel';
+
   };
 
   const goBack = () => {
@@ -71,8 +77,10 @@ function App() {
 
         {/* Contenu principal */}
         <main className="flex-1 overflow-hidden flex flex-col">
+          {screen === 'SPLASH' && <SplashScreen onStart={() => setScreen('HOME')} />}
           {screen === 'HOME' && <LanguageSelection onSelect={handleLanguageSelect} />}
           {screen === 'MODE_SELECT' && <ModeSelection onSelect={handleModeSelect} language={language} />}
+
           {screen === 'CATEGORY' && (
             <CategoryMenu
               onSelectCategory={handleCategorySelect}
