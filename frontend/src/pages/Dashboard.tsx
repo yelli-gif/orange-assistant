@@ -26,10 +26,12 @@ export default function Dashboard({ language, interactionMode }: Props) {
 
   const triggerwelcomeVoice = () => {
     const welcomeText = language === 'en' 
-        ? "Identity verified. Welcome back. Your balance is 1500 FCFA." 
+        ? "Identity verified. Welcome back. Your balance is 45,250 FCFA and you have 2.3 Gigabytes of data remaining." 
         : language === 'dioula'
-        ? "Identification soti la. I ni tché. I ka wari bé 1 500."
-        : "Identité vérifiée. Bienvenue. Votre solde actuel est de 1 500 francs CFA.";
+        ? "Identification soti la. I ni tché. I ka wari bé 45 250, i ka internet taaba bé 2,3 Giga."
+        : language === 'baoule'
+        ? "Mo. I ka sika bé 45 250, i ka internet sika bé 2,3 Giga."
+        : "Identité vérifiée. Bienvenue. Votre solde est de 45 250 francs CFA et il vous reste 2,3 Gigas de forfait internet.";
     
     const msg = new SpeechSynthesisUtterance(welcomeText);
     msg.lang = language === 'en' ? 'en-US' : 'fr-FR';
@@ -96,7 +98,7 @@ export default function Dashboard({ language, interactionMode }: Props) {
       <div className="grid grid-cols-1 gap-4 mb-8">
         {/* Solde Card Glass */}
         <button 
-            onClick={() => speak(`${t.balance} 1 500`)}
+            onClick={() => speak(`${t.balance} 45 250`)}
             className="glass-card p-8 rounded-[2.5rem] flex flex-col gap-4 text-left active:scale-95 transition-all relative overflow-hidden"
         >
            <div className="absolute top-0 right-0 p-6 opacity-5">
@@ -104,7 +106,7 @@ export default function Dashboard({ language, interactionMode }: Props) {
            </div>
            <p className="text-[#757575] text-[11px] font-black uppercase tracking-[0.2em]">{t.balance}</p>
            <div className="flex items-baseline gap-2">
-              <span className="text-6xl font-outfit font-black text-[#2D2D2D] tracking-tighter">1.500</span>
+              <span className="text-6xl font-outfit font-black text-[#2D2D2D] tracking-tighter">45.250</span>
               <span className="text-2xl font-bold text-[#FF7900]">CFA</span>
            </div>
         </button>

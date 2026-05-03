@@ -63,7 +63,7 @@ export default function CategoryMenu({ language, onSelectCategory, interactionMo
             <div>
                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{t.balance}</p>
                <h3 className="text-4xl font-outfit font-black text-[#1A1A1A]">
-                  {showBalance ? '45.250' : '••••••'} <span className="text-xl font-bold text-[#A35200]">CFA</span>
+                  {showBalance ? '1.500' : '••••••'} <span className="text-xl font-bold text-[#A35200]">CFA</span>
                </h3>
             </div>
             <div className="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600">
@@ -73,7 +73,7 @@ export default function CategoryMenu({ language, onSelectCategory, interactionMo
          
          <div className="flex justify-between items-center mt-6">
             <button 
-              onClick={() => { setShowBalance(!showBalance); speak(showBalance ? "Solde masqué" : "45 250 CFA"); }}
+              onClick={() => { setShowBalance(!showBalance); speak(showBalance ? "Solde masqué" : "1 500 CFA"); }}
               className="flex items-center gap-2 text-[#A35200] font-bold text-xs"
             >
                {showBalance ? <EyeOff size={18} /> : <Eye size={18} />}
