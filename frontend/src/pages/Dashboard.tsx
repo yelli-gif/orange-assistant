@@ -20,10 +20,12 @@ export default function Dashboard({ language, interactionMode }: Props) {
 
     // Vocalisation intelligente basée sur la langue sélectionnée
     const welcomeText = language === 'en' 
-        ? "Welcome. Your balance is 1500 FCFA." 
+        ? "Welcome. Your balance is 1500 FCFA and you have 2.3 Gigabytes of data remaining." 
         : language === 'dioula'
-        ? "I ni tché. I ka wari bé 1500 FCFA."
-        : "Bienvenue. Votre solde actuel est de 1 500 francs CFA.";
+        ? "I ni tché. I ka wari bé 1 500, i ka internet taaba bé 2,3 Giga."
+        : language === 'baoule'
+        ? "Mo. I ka sika bé 1 500, i ka internet sika bé 2,3 Giga."
+        : "Bienvenue. Votre solde est de 1 500 francs CFA et il vous reste 2,3 Gigas de forfait internet.";
     
     const msg = new SpeechSynthesisUtterance(welcomeText);
     msg.lang = language === 'en' ? 'en-US' : 'fr-FR';
