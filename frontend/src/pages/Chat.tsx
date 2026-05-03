@@ -77,6 +77,11 @@ export default function Chat({ language, initialPrompt, interactionMode, onTrans
       
       setMessages(prev => [...prev, botMsg]);
       speak(replyText);
+      
+      // Auto-écoute après la réponse de l'IA (si mode vocal)
+      if (interactionMode === 'voice') {
+        setTimeout(() => toggleListen(), 2000);
+      }
     } catch (err) {
       setMessages(prev => [...prev, { id: Date.now() + 1, text: "Je comprends. Je vais vérifier cela.", sender: 'bot', timestamp: "" }]);
     }
@@ -93,8 +98,16 @@ export default function Chat({ language, initialPrompt, interactionMode, onTrans
       recognition.lang = language === 'en' ? 'en-US' : 'fr-FR';
       recognition.onstart = () => setIsListening(true);
       recognition.onresult = (e: any) => {
-        const t = e.results[0][0].transcript;
-        handleSend(t);
+        const transcript = e.results[0][0].transcript;
+        
+        // Commande vocale pour le transfert humain
+        if ((transcript.toLowerCase().includes('oui') || transcript.toLowerCase().includes('yes')) && messages.some(m => m.isComplex)) {
+          onTransfer();
+          setIsListening(false);
+          return;
+        }
+
+        handleSend(transcript);
         setIsListening(false);
       };
       recognition.onerror = () => setIsListening(false);
