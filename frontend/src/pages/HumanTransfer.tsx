@@ -1,4 +1,4 @@
-import { Headphones, Star, Phone, MessageSquare, ArrowLeft, ShieldCheck } from 'lucide-react';
+import { Star, Phone, MessageSquare, ArrowLeft, ShieldCheck } from 'lucide-react';
 
 interface Props {
   onBack: () => void;
