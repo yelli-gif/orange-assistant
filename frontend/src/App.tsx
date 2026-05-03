@@ -31,12 +31,14 @@ function App() {
       <div className="mobile-frame">
         
         {/* Header App (Image 1) */}
-        <header className="bg-white px-6 py-5 flex items-center justify-between border-b border-slate-50 z-20">
-          <div className="flex items-center gap-2">
-            <SignalMedium className="text-orange-brand" size={20} />
-            <h1 className="text-orange-brand font-black text-xl tracking-tight font-outfit uppercase">OraVoice 24/7</h1>
+        <header className="bg-white px-6 py-8 flex items-center justify-between border-b border-slate-50 z-20">
+          <div className="flex items-center gap-3">
+            <SignalMedium className="text-orange-brand" size={24} strokeWidth={3} />
+            <h1 className="text-orange-brand font-black text-xl tracking-tighter font-outfit">Orange Assistant</h1>
           </div>
-          <UserCircle2 className="text-slate-400" size={28} />
+          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+             <UserCircle2 size={24} />
+          </div>
         </header>
 
         {/* Content Area */}
@@ -96,25 +98,27 @@ function App() {
         )}
 
 
-        {/* Navigation Bar (Bottom) - Image 1/2 */}
-        <nav className="bg-white border-t border-slate-100 px-10 py-4 flex justify-between items-center z-20">
-          <button onClick={() => setScreen('DASHBOARD')} className={`nav-item ${screen === 'DASHBOARD' ? 'active' : ''}`}>
-            <div className={`p-2 rounded-xl transition-all ${screen === 'DASHBOARD' ? 'bg-orange-50' : ''}`}>
-              <Home size={24} />
+        {/* Navigation Bar (Bottom) - Style Pixel Perfect */}
+        <nav className="bg-white border-t border-slate-50 px-8 py-4 flex justify-between items-center z-20">
+          <button onClick={() => setScreen('SPLASH')} className={`flex flex-col items-center gap-1 transition-all ${screen === 'SPLASH' || screen === 'HOME' ? 'text-orange-900' : 'text-slate-400'}`}>
+            <div className={`p-4 rounded-[1.2rem] transition-all ${screen === 'SPLASH' || screen === 'HOME' ? 'bg-[#FFF5ED] text-[#FF7900]' : ''}`}>
+              <Home size={26} strokeWidth={screen === 'SPLASH' || screen === 'HOME' ? 2.5 : 1.5} />
             </div>
-            <span>Accueil</span>
+            <span className="text-[11px] font-black uppercase tracking-tighter">Accueil</span>
           </button>
-          <button onClick={() => setScreen('CATEGORY')} className={`nav-item ${screen === 'CATEGORY' ? 'active' : ''}`}>
-            <div className={`p-2 rounded-xl transition-all ${screen === 'CATEGORY' ? 'bg-orange-50' : ''}`}>
-              <Grid size={24} />
+          
+          <button onClick={() => setScreen('CATEGORY')} className={`flex flex-col items-center gap-1 transition-all ${screen === 'CATEGORY' ? 'text-orange-900' : 'text-slate-400'}`}>
+            <div className={`p-4 rounded-[1.2rem] transition-all ${screen === 'CATEGORY' ? 'bg-[#FFF5ED] text-[#FF7900]' : ''}`}>
+              <Grid size={26} strokeWidth={screen === 'CATEGORY' ? 2.5 : 1.5} />
             </div>
-            <span>Services</span>
+            <span className="text-[11px] font-black uppercase tracking-tighter">Services</span>
           </button>
-          <button onClick={() => setScreen('PURCHASE')} className={`nav-item ${screen === 'PURCHASE' ? 'active' : ''}`}>
-            <div className={`p-2 rounded-xl transition-all ${screen === 'PURCHASE' ? 'bg-orange-50' : ''}`}>
-              <LayoutDashboard size={24} />
+          
+          <button onClick={() => setScreen('PURCHASE')} className={`flex flex-col items-center gap-1 transition-all ${screen === 'PURCHASE' ? 'text-orange-900' : 'text-slate-400'}`}>
+            <div className={`p-4 rounded-[1.2rem] transition-all ${screen === 'PURCHASE' ? 'bg-[#FFF5ED] text-[#FF7900]' : ''}`}>
+              <LayoutDashboard size={26} strokeWidth={screen === 'PURCHASE' ? 2.5 : 1.5} />
             </div>
-            <span>Tableau</span>
+            <span className="text-[11px] font-black uppercase tracking-tighter">Tableau</span>
           </button>
         </nav>
       </div>
