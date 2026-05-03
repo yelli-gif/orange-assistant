@@ -1,28 +1,33 @@
 import { useEffect } from 'react';
-import { Wifi, Smartphone, Wallet, ShieldAlert, Mic, Volume2 } from 'lucide-react';
-
-const CATEGORIES = [
-  { id: 'network', label: 'Réseau', icon: <Wifi size={24} />, speak: "Problème de connexion internet ou réseau." },
-  { id: 'sim', label: 'Ma Ligne', icon: <Smartphone size={24} />, speak: "Problème avec ma carte SIM ou mon numéro." },
-  { id: 'money', label: 'Orange Money', icon: <Wallet size={24} />, speak: "Problème avec mon argent Orange Money." },
-  { id: 'scam', label: 'Fraude', icon: <ShieldAlert size={24} />, speak: "Signaler un vol ou une arnaque." },
-];
+import { Wifi, Smartphone, Receipt, Headphones, Volume2, Mic, Search } from 'lucide-react';
+import type { Language } from '../App';
 
 interface Props {
-  language: string | null;
+  language: Language;
   interactionMode?: 'text' | 'voice';
 }
+
+const COMPLAINTS = [
+  { id: 'network', label: 'Problèmes Réseau', sub: 'Signal faible, coupures d\'appels ou internet lent dans votre zone.', icon: <Wifi size={24} />, speak: "Problème de réseau ou internet lent." },
+  { id: 'sim', label: 'Blocage Carte SIM', sub: 'Code PUK perdu, SIM bloquée ou renouvellement de ligne.', icon: <Smartphone size={24} />, speak: "Carte SIM bloquée ou code PUK perdu." },
+  { id: 'billing', label: 'Facturation', sub: 'Contestation de solde, erreurs de débit ou historique de recharge.', icon: <Receipt size={24} />, speak: "Problème de facture ou de prélèvement." },
+];
 
 export default function Claim({ language, interactionMode }: Props) {
   
   useEffect(() => {
     if (interactionMode !== 'voice') return;
-    const text = language === 'en' ? "Explain your problem verbally or choose a category below." : "Expliquez votre problème vocalement, ou choisissez une catégorie ci-dessous.";
+
+    const text = language === 'en' 
+      ? "Help and support. Choose a category or speak directly to an advisor." 
+      : "Assistance et réclamations. Choisissez une catégorie ou parlez directement à un conseiller.";
+    
     const msg = new SpeechSynthesisUtterance(text);
     msg.lang = language === 'en' ? 'en-US' : 'fr-FR';
     window.speechSynthesis.speak(msg);
+
     return () => window.speechSynthesis.cancel();
-  }, [language]);
+  }, [language, interactionMode]);
 
   const speak = (msgText: string) => {
     if (interactionMode !== 'voice') return;
@@ -33,62 +38,78 @@ export default function Claim({ language, interactionMode }: Props) {
   };
 
   return (
-    <div className="flex flex-col p-8 animate-fade-in relative pb-10">
+    <div className="flex flex-col p-6 animate-fade-in pb-10 bg-[#F9F9F9]">
       
-      <div className="mb-10 mt-2 flex justify-between items-start">
-        <div className="max-w-[80%]">
-            <h2 className="text-4xl font-outfit font-black text-[#2D2D2D] tracking-tight">Support &{"\n"}Aide</h2>
-            <p className="text-[#757575] font-medium text-[15px] mt-2 leading-relaxed">Nous sommes là pour vous aider rapidement.</p>
+      {/* Header Interne - Image 16 */}
+      <div className="mb-8 mt-2 space-y-4">
+        <div className="flex justify-between items-center">
+            <h2 className="text-[32px] font-outfit font-black text-[#1A1A1A] leading-tight tracking-tight">
+                Assistance & <br/> Réclamations
+            </h2>
+            <div className="flex gap-2">
+                <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400">
+                    <Search size={20} />
+                </button>
+            </div>
         </div>
-        <button onClick={() => speak("Ici vous pouvez signaler un problème. Utilisez le gros bouton mic pour parler.")} className="p-3 bg-white rounded-full shadow-sm text-orange-brand">
-            <Volume2 size={24} />
-        </button>
+        <p className="text-[#666666] font-medium text-[14px] leading-relaxed max-w-[90%]">
+            Comment pouvons-nous vous aider aujourd'hui ? Sélectionnez une catégorie ou parlez directement à un conseiller.
+        </p>
       </div>
 
-      {/* Bouton Vocal Géant - Style Image 10 */}
-      <div className="mb-12">
-        <button 
-           onClick={() => speak("Dites-moi votre problème après le bip sonore")}
-           className="w-full aspect-square bg-gradient-to-br from-orange-600 to-orange-400 rounded-[3rem] shadow-2xl shadow-orange-brand/30 flex flex-col items-center justify-center space-y-8 border-8 border-white/20 active:scale-95 transition-all group"
-        >
-           <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-              <Mic size={56} className="text-orange-brand" />
-           </div>
-           <div className="text-center">
-              <h3 className="text-white text-3xl font-outfit font-black leading-tight uppercase tracking-tighter">Parler maintenant</h3>
-              <p className="text-white/80 font-bold text-sm tracking-widest uppercase">Expertise Vocale</p>
-           </div>
-        </button>
+      {/* Categories List - Image 16 */}
+      <div className="space-y-4 mb-10">
+        {COMPLAINTS.map((item) => (
+          <button 
+            key={item.id}
+            onClick={() => { speak(item.speak); }}
+            className="w-full bg-white p-7 rounded-[2.5rem] flex flex-col items-start text-left border border-slate-50 shadow-sm active:scale-95 transition-all group"
+          >
+            <div className="w-14 h-14 bg-[#FFF5ED] rounded-2xl flex items-center justify-center text-orange-brand mb-5 group-hover:bg-orange-brand group-hover:text-white transition-colors">
+               {item.icon}
+            </div>
+            <p className="font-black text-[#1A1A1A] text-xl mb-2">{item.label}</p>
+            <p className="text-[12px] text-slate-400 font-medium leading-relaxed">{item.sub}</p>
+          </button>
+        ))}
       </div>
 
-      <div className="space-y-6">
-         <p className="text-[13px] font-bold text-[#757575] uppercase tracking-[0.25em] pl-2">Par Catégorie</p>
-         
-         <div className="grid grid-cols-2 gap-4">
-            {CATEGORIES.map((cat) => (
-              <button 
-                key={cat.id} 
-                onClick={() => speak(cat.speak)}
-                className="bg-white p-8 rounded-[2.5rem] flex flex-col items-center text-center gap-4 shadow-sm border border-slate-50 active:scale-95 transition-all"
-              >
-                <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400">
-                   {cat.icon}
-                </div>
-                <span className="font-black text-sm text-[#2D2D2D] uppercase tracking-tighter">{cat.label}</span>
-              </button>
-            ))}
+      {/* Human Assistance Banner - Image 15 */}
+      <div className="relative w-full aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl mb-12 group">
+         <img 
+            src="https://images.unsplash.com/photo-1549923746-c502d488b3ea?auto=format&fit=crop&q=80&w=800" 
+            alt="Customer Expert" 
+            className="w-full h-full object-cover"
+         />
+         {/* Overlay Sombri */}
+         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-col justify-end p-8 space-y-6">
+            <div className="bg-orange-brand text-white text-[10px] font-black px-4 py-1.5 rounded-full inline-block self-start uppercase tracking-widest animate-pulse">
+               Disponible Maintenant
+            </div>
+            
+            <div className="space-y-4">
+                <h3 className="text-white font-black text-3xl leading-tight">Besoin d'une assistance personnalisée ?</h3>
+                <p className="text-white/70 text-sm font-medium leading-relaxed">
+                   Nos experts sont en ligne pour résoudre vos demandes les plus complexes en direct.
+                </p>
+            </div>
+
+            <button 
+                onClick={() => speak("Je vous mets en relation avec un de nos experts. Veuillez patienter.")}
+                className="w-full bg-[#FF7900] text-white py-5 rounded-[22px] font-black text-sm flex items-center justify-center gap-3 shadow-xl active:scale-95 transition-all uppercase tracking-tighter"
+            >
+               <Headphones size={22} />
+               Parler à un conseiller humain
+            </button>
          </div>
       </div>
 
-      <div className="mt-12 bg-white p-8 rounded-[3rem] border border-slate-50 space-y-6 shadow-sm">
-         <h4 className="font-black text-xl text-[#2D2D2D]">Écrire mon problème</h4>
-         <textarea 
-            className="w-full bg-slate-50 rounded-[1.5rem] p-6 text-sm font-medium border-none focus:ring-2 focus:ring-orange-brand/20 min-h-[150px]"
-            placeholder="Dites-nous ce qui ne va pas..."
-         ></textarea>
-         <button className="w-full bg-black text-white py-5 rounded-2xl font-bold text-lg shadow-xl uppercase tracking-widest">
-            Envoyer
-         </button>
+      {/* Microphone flottant incitatif */}
+      <div className="flex flex-col items-center gap-4 py-10">
+         <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl border border-slate-50">
+            <Mic size={32} className="text-orange-brand" />
+         </div>
+         <p className="text-[#A35200] font-black text-[11px] uppercase tracking-[0.2em]">Dites simplement votre problème</p>
       </div>
 
     </div>
