@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { 
-  Send, Wallet, Receipt, Phone, Eye, EyeOff, Mic, Headphones
+  Send, Receipt, Phone, Mic, Headphones
 } from 'lucide-react';
 import { translations } from '../translations';
 import type { Language } from '../App';
@@ -19,7 +19,6 @@ interface Props {
 }
 
 export default function CategoryMenu({ language, onSelectCategory, interactionMode }: Props) {
-  const [showBalance, setShowBalance] = useState(true);
   const t = translations[language as keyof typeof translations] || translations.fr;
 
   useEffect(() => {
@@ -45,14 +44,6 @@ export default function CategoryMenu({ language, onSelectCategory, interactionMo
     recognition.start();
     return () => recognition.stop();
   }, [language, onSelectCategory, interactionMode, t]);
-
-  const speak = (txt: string) => {
-    if (interactionMode !== 'voice') return;
-    window.speechSynthesis.cancel();
-    const msg = new SpeechSynthesisUtterance(txt);
-    msg.lang = language === 'en' ? 'en-US' : 'fr-FR';
-    window.speechSynthesis.speak(msg);
-  };
 
   return (
     <div className="flex flex-col p-6 animate-fade-in pb-10">
