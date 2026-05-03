@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Wifi, Smartphone, Receipt, Headphones, Volume2, Mic, Search } from 'lucide-react';
+import { Wifi, Smartphone, Receipt, Headphones, Mic, Search } from 'lucide-react';
 import type { Language } from '../App';
 
 interface Props {
