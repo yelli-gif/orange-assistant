@@ -40,20 +40,28 @@ export default function Chat({ language, initialPrompt, interactionMode, onTrans
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Sécurité Silence : Stopper la voix quand on quitte la page
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, []);
+
   const speak = (msg: string) => {
     if (interactionMode !== 'voice') return;
     window.speechSynthesis.cancel();
-    
-    // Nettoyage du texte pour la voix (enlever étoiles, puces, etc.)
-    const cleanText = msg
-      .replace(/\*\*/g, '') // Enlever les gras
-      .replace(/\*/g, '')   // Enlever les étoiles simples
-      .replace(/•/g, ', ')  // Remplacer les puces par des virgules pour la pause
-      .replace(/\n/g, '. '); // Remplacer les retours à la ligne par des points
-      
+    const cleanText = msg.replace(/\*\*/g, '').replace(/\*/g, '').replace(/•/g, ', ').replace(/\n/g, '. ');
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = language === 'en' ? 'en-US' : 'fr-FR';
     window.speechSynthesis.speak(utterance);
+  };
+
+  const parseOptions = (text: string) => {
+    if (!text.includes('•')) return { header: text, options: [] };
+    const lines = text.split('\n');
+    const header = lines.filter(l => !l.includes('•')).join(' ');
+    const options = lines.filter(l => l.includes('•')).map(l => l.replace('•', '').trim());
+    return { header, options };
   };
 
   const handleSend = async (text: string = inputText) => {
@@ -147,7 +155,27 @@ export default function Chat({ language, initialPrompt, interactionMode, onTrans
                   ? 'bg-orange-brand text-white rounded-tr-none' 
                   : 'bg-white text-slate-800 rounded-tl-none border border-slate-50'
               }`}>
-                {msg.text}
+                {(() => {
+                  const { header, options } = parseOptions(msg.text);
+                  return (
+                    <div className="space-y-4">
+                      <p>{header}</p>
+                      {options.length > 0 && (
+                        <div className="flex flex-col gap-2 mt-2">
+                          {options.map((opt, i) => (
+                            <button 
+                              key={i} 
+                              onClick={() => handleSend(opt)}
+                              className="w-full text-left bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:border-orange-brand hover:text-orange-brand transition-all active:scale-95 text-xs font-black uppercase tracking-tight"
+                            >
+                              {opt}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
                 
                 {msg.isComplex && (
                   <button 
