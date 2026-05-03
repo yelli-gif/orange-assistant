@@ -9,9 +9,10 @@ import Dashboard from './pages/Dashboard';
 import Claim from './pages/Claim';
 import Purchase from './pages/Purchase';
 import HumanTransfer from './pages/HumanTransfer';
+import SecurityChallenge from './pages/SecurityChallenge';
 
 export type Language = 'fr' | 'nouchi' | 'dioula' | 'baoule' | 'en' | null;
-export type Screen = 'SPLASH' | 'HOME' | 'MODE_SELECT' | 'CATEGORY' | 'CHAT_TEXT' | 'CHAT_VOICE' | 'DASHBOARD' | 'CLAIM' | 'PURCHASE' | 'HUMAN_TRANSFER';
+export type Screen = 'SPLASH' | 'HOME' | 'MODE_SELECT' | 'CATEGORY' | 'CHAT_TEXT' | 'CHAT_VOICE' | 'DASHBOARD' | 'CLAIM' | 'PURCHASE' | 'HUMAN_TRANSFER' | 'SECURITY_CHALLENGE';
 
 function App() {
   const [screen, setScreen] = useState<Screen>('SPLASH');
@@ -19,6 +20,7 @@ function App() {
   const [initialPrompt, setInitialPrompt] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [interactionMode, setInteractionMode] = useState<'text' | 'voice'>('text');
+  const [securityCallback, setSecurityCallback] = useState<(() => void) | null>(null);
 
   const goBack = () => {
     if (screen === 'CHAT_TEXT') setScreen('CATEGORY');
@@ -28,7 +30,7 @@ function App() {
   };
 
   // On ne montre la navigation que sur les pages principales
-  const showNav = screen !== 'SPLASH' && screen !== 'HOME' && screen !== 'MODE_SELECT' && screen !== 'HUMAN_TRANSFER';
+  const showNav = screen !== 'SPLASH' && screen !== 'HOME' && screen !== 'MODE_SELECT' && screen !== 'HUMAN_TRANSFER' && screen !== 'SECURITY_CHALLENGE';
 
   return (
     <div className="mobile-frame">
@@ -76,6 +78,13 @@ function App() {
 
         {screen === 'HUMAN_TRANSFER' && <HumanTransfer onBack={() => setScreen('CHAT_TEXT')} />}
         
+        {screen === 'SECURITY_CHALLENGE' && (
+          <SecurityChallenge onSuccess={() => {
+            setScreen('CHAT_TEXT');
+            if (securityCallback) securityCallback();
+          }} />
+        )}
+
         {(screen === 'CHAT_TEXT' || screen === 'CHAT_VOICE') && (
           <Chat
             language={language}
@@ -84,6 +93,10 @@ function App() {
             category={selectedCategory}
             interactionMode={interactionMode}
             onTransfer={() => setScreen('HUMAN_TRANSFER')}
+            onSecurityChallenge={(cb) => {
+              setSecurityCallback(() => cb);
+              setScreen('SECURITY_CHALLENGE');
+            }}
           />
         )}
       </main>

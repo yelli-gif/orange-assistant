@@ -10,6 +10,7 @@ interface Props {
   category?: Category | null;
   interactionMode?: 'text' | 'voice';
   onTransfer: () => void;
+  onSecurityChallenge: (callback: () => void) => void;
 }
 
 interface Message {
@@ -22,7 +23,7 @@ interface Message {
 
 const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : '';
 
-export default function Chat({ language, initialPrompt, interactionMode, onTransfer }: Props) {
+export default function Chat({ language, initialPrompt, interactionMode, onTransfer, onSecurityChallenge }: Props) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -70,6 +71,22 @@ export default function Chat({ language, initialPrompt, interactionMode, onTrans
     setMessages(prev => [...prev, userMsg]);
     setInputText("");
 
+    // Détection de demande SENSIBLE (Parcours 3)
+    const isSensible = text.toLowerCase().includes('solde') || text.toLowerCase().includes('argent') || text.toLowerCase().includes('compte');
+    
+    if (isSensible) {
+      speak("Pour votre sécurité, une vérification biométrique est nécessaire.");
+      onSecurityChallenge(() => {
+        // Cette fonction sera appelée APRES le succès du scan
+        proceedWithChat(text);
+      });
+      return;
+    }
+
+    proceedWithChat(text);
+  };
+
+  const proceedWithChat = async (text: string) => {
     try {
       const response = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -77,10 +94,10 @@ export default function Chat({ language, initialPrompt, interactionMode, onTrans
       });
       const data = await response.json();
       
-      // Simulation intelligence Simple vs Complexe
-      const isComplex = text.toLowerCase().includes('facture') || text.toLowerCase().includes('vol') || text.toLowerCase().includes('bloqué');
+      // Simulation intelligence Simple vs Complexe (Parcours 3)
+      const isComplex = text.toLowerCase().includes('facture') || text.toLowerCase().includes('vol') || text.toLowerCase().includes('bloqué') || text.toLowerCase().includes('litige');
       const replyText = isComplex 
-        ? "Cette demande nécessite l'intervention d'un expert. Souhaitez-vous parler à un conseiller humain ?" 
+        ? "Cette demande est complexe et nécessite un expert. Souhaitez-vous parler à un conseiller humain ?" 
         : data.reply;
 
       const botMsg: Message = { 
