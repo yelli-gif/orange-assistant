@@ -1,156 +1,164 @@
-import { useEffect } from 'react';
-import {
-  Phone, CreditCard, Wifi, Wallet, Receipt, Home, ShieldCheck,
-  AlertCircle, Mic
+import { useEffect, useState } from 'react';
+import { 
+  Send, Wallet, Receipt, Phone, ArrowUpCircle, Eye, EyeOff, Mic, ArrowDownCircle, Plus
 } from 'lucide-react';
-
-export interface Category {
-  id: string;
-  label: string;
-  emoji: string;
-  icon: React.ReactNode;
-  description: string;
-  color: string;
-  borderColor: string;
-  iconBg: string;
-  prompt: string; // phrase envoyée au backend en cliquant
-}
-
-export const CATEGORIES: Category[] = [
-  {
-    id: 'sim', label: 'CARTE SIM & LIGNE', emoji: '',
-    icon: <Phone size={20} strokeWidth={1.5} />, description: 'Identité, PUK, code PIN...',
-    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
-    prompt: 'Aide-moi avec ma ligne mobile'
-  },
-  {
-    id: 'credit', label: 'CRÉDIT & FORFAITS', emoji: '',
-    icon: <CreditCard size={20} strokeWidth={1.5} />, description: 'Solde et rechargement',
-    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
-    prompt: 'Consulter mon crédit'
-  },
-  {
-    id: 'orange_money', label: 'ORANGE MONEY', emoji: '',
-    icon: <Wallet size={20} strokeWidth={1.5} />, description: 'Paiements et transferts',
-    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
-    prompt: 'Transfert d\'argent'
-  },
-  {
-    id: 'internet', label: 'INTERNET MOBILE', emoji: '',
-    icon: <Wifi size={20} strokeWidth={1.5} />, description: 'Pass 4G/5G et Data',
-    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
-    prompt: 'Acheter pass internet'
-  },
-  {
-    id: 'domicile', label: 'INTERNET DOMICILE', emoji: '',
-    icon: <Home size={20} strokeWidth={1.5} />, description: 'Fibre et Flybox',
-    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
-    prompt: 'Aide internet maison'
-  },
-  {
-    id: 'facture', label: 'FACTURES', emoji: '',
-    icon: <Receipt size={20} strokeWidth={1.5} />, description: 'CIE, SODECI, Canal+',
-    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
-    prompt: 'Payer une facture'
-  },
-  {
-    id: 'securite', label: 'SÉCURITÉ', emoji: '',
-    icon: <ShieldCheck size={20} strokeWidth={1.5} />, description: 'Signaler une fraude',
-    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
-    prompt: 'Problème de sécurité'
-  },
-  {
-    id: 'reclamation', label: 'RÉCLAMATIONS', emoji: '',
-    icon: <AlertCircle size={20} strokeWidth={1.5} />, description: 'Dépôt de plainte',
-    color: 'text-slate-900', borderColor: 'border-slate-100', iconBg: 'bg-slate-50',
-    prompt: 'Faire une réclamation'
-  },
-];
-
+import type { Language } from '../App';
 
 interface Props {
-  onSelectCategory: (cat: Category) => void;
+  language: Language;
+  onSelectCategory: (cat: any) => void;
   onVoiceMode: () => void;
-  language: string | null;
-  interactionMode?: 'text' | 'voice';
 }
 
+export default function CategoryMenu({ language, onSelectCategory }: Props) {
+  const [showBalance, setShowBalance] = useState(true);
+  const [isListening, setIsListening] = useState(false);
 
-export default function CategoryMenu({ onSelectCategory, onVoiceMode, language, interactionMode }: Props) {
-
+  // Système d'écoute automatique des mots-clés (pour l'accessibilité vocale)
   useEffect(() => {
-    if (interactionMode === 'text') return; // Silence en mode message
-    const msg = new SpeechSynthesisUtterance(
-      'Bonjour ! Comment puis-je vous aider ? Dites le sujet de votre problème, ou cliquez sur une catégorie.'
-    );
-
-    msg.lang = language === 'en' ? 'en-US' : 'fr-FR';
-    msg.onend = () => startListening();
-    window.speechSynthesis.speak(msg);
-    return () => window.speechSynthesis.cancel();
-  }, []);
-
-  const startListening = () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) return;
-    const r = new SpeechRecognition();
-    r.lang = language === 'en' ? 'en-US' : 'fr-FR';
-    r.start();
-    r.onresult = (e: any) => {
-      const t = e.results[0][0].transcript.toLowerCase();
-      const match = CATEGORIES.find(c =>
-        t.includes(c.id.replace('_', ' ')) ||
-        c.label.toLowerCase().split(' ').some((word: string) => t.includes(word))
-      );
-      if (match) onSelectCategory(match);
-      else {
-        // Aller directement au chat avec ce que l'utilisateur a dit
-        onSelectCategory({ ...CATEGORIES[10], prompt: e.results[0][0].transcript });
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = language === 'en' ? 'en-US' : 'fr-FR';
+    recognition.continuous = true;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
+      
+      if (transcript.includes('transfert') || transcript.includes('envoyer')) {
+        onSelectCategory({ id: 'transfer', label: 'Transfert' });
+      } else if (transcript.includes('facture') || transcript.includes('payer')) {
+        onSelectCategory({ id: 'bill', label: 'Factures' });
+      } else if (transcript.includes('crédit') || transcript.includes('recharger')) {
+        onSelectCategory({ id: 'credit', label: 'Crédit' });
       }
     };
-    r.onend = () => {};
+
+    recognition.start();
+    return () => recognition.stop();
+  }, [language, onSelectCategory]);
+
+  const speak = (txt: string) => {
+    window.speechSynthesis.cancel();
+    const msg = new SpeechSynthesisUtterance(txt);
+    msg.lang = language === 'en' ? 'en-US' : 'fr-FR';
+    window.speechSynthesis.speak(msg);
   };
 
   return (
-    <div className="flex-1 flex flex-col p-8 bg-white overflow-hidden h-full">
-      <div className="mb-8 space-y-2">
-        <h2 className="text-3xl font-outfit font-black text-slate-900 tracking-tight text-center md:text-left">
-          SERVICES
-        </h2>
-        <p className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] text-center md:text-left">
-          Plateforme d'assistance officielle
-        </p>
+    <div className="flex-1 flex flex-col p-6 bg-[#F9F9F9] overflow-y-auto pb-24 animate-fade-in no-scrollbar">
+      
+      {/* Orange Money Card - Image 13 */}
+      <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-50 mb-10 relative overflow-hidden group">
+         <div className="flex justify-between items-start mb-4">
+            <div>
+               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Solde Orange Money</p>
+               <h3 className="text-4xl font-outfit font-black text-[#1A1A1A]">
+                  {showBalance ? '45.250' : '••••••'} <span className="text-xl font-bold text-[#A35200]">CFA</span>
+               </h3>
+               <p className="text-[9px] text-slate-400 font-bold mt-2 italic">Dernière mise à jour : Aujourd'hui, 10:45</p>
+            </div>
+            <div className="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600">
+               <Wallet size={24} />
+            </div>
+         </div>
+         
+         <div className="flex justify-between items-center mt-6">
+            <button 
+              onClick={() => { setShowBalance(!showBalance); speak(showBalance ? "Solde masqué" : "Votre solde est de 45 250 francs"); }}
+              className="flex items-center gap-2 text-[#A35200] font-bold text-xs"
+            >
+               {showBalance ? <EyeOff size={18} /> : <Eye size={18} />}
+               {showBalance ? "Masquer le solde" : "Afficher le solde"}
+            </button>
+            <button 
+               onClick={() => speak("Recharger mon compte")}
+               className="bg-[#FF7900] text-white px-8 py-3 rounded-2xl font-black text-sm shadow-lg shadow-orange-brand/20 active:scale-95 transition-all"
+            >
+               Recharger
+            </button>
+         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-2 pb-10">
+      <div className="mb-10">
+        <h2 className="text-2xl font-outfit font-black text-[#1A1A1A] mb-6">Services Rapides</h2>
+        
+        {/* Services Grid - Image 13 */}
         <div className="grid grid-cols-2 gap-4">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => onSelectCategory(cat)}
-              className="flex flex-col items-center p-6 bg-white border border-slate-100 rounded-2xl hover:border-slate-300 hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-300 group text-center"
+          {[
+            { id: 'transfer', label: 'Transfert', sub: 'Envoyer de l\'argent vers un tiers', icon: <Send size={24} />, speak: "Faire un transfert d'argent" },
+            { id: 'retrait', label: 'Retrait', sub: 'Retrait en agence ou DAB', icon: <ArrowDownCircle size={24} />, speak: "Faire un retrait en espèces" },
+            { id: 'bill', label: 'Factures', sub: 'CIE, SODECI, Canal+, et plus', icon: <Receipt size={24} />, speak: "Payer une facture" },
+            { id: 'credit', label: 'Crédit', sub: 'Recharger votre ligne mobile', icon: <Phone size={24} />, speak: "Acheter du crédit ou un forfait" },
+          ].map((serv) => (
+            <button 
+              key={serv.id}
+              onClick={() => { speak(serv.speak); onSelectCategory(serv); }}
+              className="bg-white p-6 rounded-[2rem] flex flex-col items-start text-left border border-slate-50 shadow-sm hover:border-orange-brand/20 transition-all active:scale-95"
             >
-              <div className="w-14 h-14 rounded-2xl bg-slate-50 group-hover:bg-orange-brand/5 flex items-center justify-center mb-4 transition-colors text-slate-400 group-hover:text-orange-brand">
-                {cat.icon}
+              <div className="w-12 h-12 bg-[#FFF5ED] rounded-2xl flex items-center justify-center text-orange-brand mb-4">
+                 {serv.icon}
               </div>
-              <span className="font-bold text-slate-900 text-[10px] leading-tight mb-1 uppercase tracking-wider">{cat.label}</span>
-              <span className="text-[9px] text-slate-400 font-medium leading-tight">{cat.description}</span>
+              <p className="font-black text-[#1A1A1A] text-sm mb-1">{serv.label}</p>
+              <p className="text-[9px] text-slate-400 font-medium leading-tight">{serv.sub}</p>
             </button>
           ))}
         </div>
       </div>
-      
-      {/* Mode Vocal Flottant Pro */}
-      <div className="pt-6 border-t border-slate-50">
-        <button 
-          onClick={onVoiceMode}
-          className="w-full bg-black text-white py-5 rounded-xl font-bold text-[11px] tracking-widest uppercase shadow-2xl hover:bg-slate-900 transition-all flex items-center justify-center gap-3"
-        >
-          <Mic size={18} />
-          Accès rapide vocal
-        </button>
+
+      {/* Voice Prompt Banner - Image 14 */}
+      <div className="bg-[#FFF5ED] p-8 rounded-[2.5rem] flex items-center gap-6 mb-10 border border-orange-100 relative">
+         <div className="relative">
+            <div className={`absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-4 border-[#FFF5ED] ${isListening ? 'animate-pulse' : ''}`}></div>
+            <div className="w-16 h-16 bg-[#FF7900] rounded-full flex items-center justify-center text-white shadow-xl">
+               <Mic size={28} />
+            </div>
+         </div>
+         <div className="flex-1">
+            <p className="text-[#A35200] font-black text-sm mb-1">"Dis-moi ce que tu veux faire"</p>
+            <p className="text-[#A35200]/60 font-bold text-[11px] italic italic">"Vire 5000 CFA à Maman"</p>
+         </div>
       </div>
+
+      {/* Recent Transactions - Image 14 */}
+      <div className="mb-10">
+         <div className="flex justify-between items-baseline mb-6">
+            <h2 className="text-2xl font-outfit font-black text-[#1A1A1A]">Transactions Récentes</h2>
+            <button className="text-[#A35200] font-bold text-xs">Voir tout</button>
+         </div>
+         
+         <div className="space-y-4">
+            <div className="bg-white p-5 rounded-3xl flex justify-between items-center border border-slate-50 shadow-sm">
+               <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-400">
+                     <ArrowUpCircle size={22} />
+                  </div>
+                  <div>
+                     <p className="font-black text-sm text-[#1A1A1A]">Transfert à Jean K.</p>
+                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Hier, 18:20</p>
+                  </div>
+               </div>
+               <span className="text-red-500 font-black text-sm">- 10.000 CFA</span>
+            </div>
+
+            <div className="bg-white p-5 rounded-3xl flex justify-between items-center border border-slate-50 shadow-sm">
+               <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-400">
+                     <Plus size={22} />
+                  </div>
+                  <div>
+                     <p className="font-black text-sm text-[#1A1A1A]">Dépôt cash</p>
+                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">23 Octobre</p>
+                  </div>
+               </div>
+               <span className="text-green-500 font-black text-sm">+ 25.000 CFA</span>
+            </div>
+         </div>
+      </div>
+
     </div>
   );
 }
-
