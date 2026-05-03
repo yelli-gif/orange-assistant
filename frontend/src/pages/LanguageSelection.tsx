@@ -24,7 +24,7 @@ export default function LanguageSelection({ onSelect }: Props) {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col p-8 bg-[#F9F9F9] animate-fade-in relative overflow-hidden">
+    <div className="flex flex-col p-8 bg-[#F9F9F9] animate-fade-in relative">
       
       <div className="mb-10 space-y-3">
         <h2 className="text-4xl font-outfit font-black text-[#2D2D2D] tracking-tight">
@@ -76,7 +76,7 @@ export default function LanguageSelection({ onSelect }: Props) {
       </div>
 
       {/* Bouton Continuer - Votre Image 3 */}
-      <div className="mt-auto">
+      <div className="mt-6 mb-10">
         <button 
           onClick={() => onSelect(selected)}
           className="w-full bg-[#FF7900] text-white py-5 rounded-[20px] font-bold text-lg shadow-xl shadow-orange-brand/20 active:scale-95 transition-transform"
