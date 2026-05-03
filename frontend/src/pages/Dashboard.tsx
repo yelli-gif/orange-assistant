@@ -126,7 +126,13 @@ export default function Dashboard({ language, interactionMode }: Props) {
 
         {/* Forfait Card Glass */}
         <button 
-            onClick={() => speak(`${t.internet} 2.3 Giga`)}
+            onClick={() => {
+              const txt = language === 'en' ? `You have 2.3 gigabytes of data remaining.` :
+                          language === 'dioula' ? `I ka internet taaba bé 2,3 Giga.` :
+                          language === 'baoule' ? `I ka internet sika bé 2,3 Giga.` :
+                          `Il vous reste 2,3 gigas de forfait internet.`;
+              speak(txt);
+            }}
             className="glass-card p-8 rounded-[2.5rem] flex flex-col gap-4 text-left active:scale-95 transition-all"
         >
            <p className="text-[#757575] text-[11px] font-black uppercase tracking-[0.2em]">{t.internet}</p>
