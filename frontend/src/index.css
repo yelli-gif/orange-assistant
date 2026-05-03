@@ -52,3 +52,10 @@ body {
 .ripple {
   @apply absolute rounded-full border border-orange-brand/20 animate-ping;
 }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

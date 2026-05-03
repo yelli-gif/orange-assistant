@@ -40,7 +40,10 @@ export default function LanguageSelection({ onSelect }: Props) {
         {languages.map((lang) => (
           <button 
             key={lang.code}
-            onClick={() => setSelected(lang.code as Language)}
+            onClick={() => {
+              setSelected(lang.code as Language);
+              onSelect(lang.code as Language); // Navigation immédiate
+            }}
             className={`relative flex flex-col items-center justify-center p-8 bg-white rounded-3xl border-2 transition-all shadow-sm ${
               selected === lang.code ? 'border-orange-brand shadow-orange-brand/5' : 'border-transparent'
             }`}

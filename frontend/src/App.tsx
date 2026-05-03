@@ -40,7 +40,7 @@ function App() {
         </header>
 
         {/* Content Area */}
-        <main className="flex-1 overflow-hidden flex flex-col bg-[#F9F9F9]">
+        <main className="flex-1 overflow-y-auto flex flex-col bg-[#F9F9F9] no-scrollbar">
           {screen === 'SPLASH' && <SplashScreen onStart={() => setScreen('HOME')} />}
           {screen === 'HOME' && <LanguageSelection onSelect={(l) => { setLanguage(l); setScreen('MODE_SELECT'); }} />}
           {screen === 'MODE_SELECT' && (
