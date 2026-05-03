@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Mic, Headphones, Wallet, Wifi, PhoneCall, ShieldAlert, X } from 'lucide-react';
+import { Mic, Headphones, X } from 'lucide-react';
 import type { Language } from '../App';
 
 const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : '';
@@ -21,7 +21,10 @@ export default function VoiceMode({ language, goBack }: Props) {
     const timer = setTimeout(() => {
       speakAndSetState("Assistant vocal activé. Je vous écoute.", 'idle');
     }, 500);
-    return () => clearTimeout(timer);
+    return () => {
+      window.speechSynthesis.cancel();
+      clearTimeout(timer);
+    };
   }, []);
 
   const speakAndSetState = (text: string, nextState: any = 'idle') => {
@@ -56,8 +59,11 @@ export default function VoiceMode({ language, goBack }: Props) {
 
   const toggleListen = () => {
     if (!recognition) return;
-    if (isListening) { recognition.stop(); setIsListening(false); setVisualState('idle'); }
-    else {
+    if (isListening) { 
+      recognition.stop(); 
+      setIsListening(false); 
+      setVisualState('idle'); 
+    } else {
       window.speechSynthesis.cancel();
       recognition.lang = language === 'en' ? 'en-US' : 'fr-FR';
       recognition.start();
@@ -66,9 +72,15 @@ export default function VoiceMode({ language, goBack }: Props) {
       recognition.onresult = (e: any) => {
         const c = e.results[0][0].transcript;
         setTranscript(c);
-        if (e.results[0].isFinal) { setIsListening(false); handleVoiceCommand(c); }
+        if (e.results[0].isFinal) { 
+          setIsListening(false); 
+          handleVoiceCommand(c); 
+        }
       };
-      recognition.onerror = () => { setIsListening(false); setVisualState('idle'); };
+      recognition.onerror = () => { 
+        setIsListening(false); 
+        setVisualState('idle'); 
+      };
     }
   };
 
@@ -105,7 +117,7 @@ export default function VoiceMode({ language, goBack }: Props) {
             <div className="flex flex-col items-center space-y-8">
                <div className="flex items-center gap-1 h-32">
                   {[1,2,3,2,1,2,3,2,1].map((h, i) => (
-                    <div key={i} className="w-2 bg-orange-brand rounded-full animate-pulse" style={{height: `${h*30}px`, animationDelay: `${i*0.1s}`}}></div>
+                    <div key={i} className="w-2 bg-orange-brand rounded-full animate-pulse" style={{height: `${h*30}px`, animationDelay: `${i*0.1}s`}}></div>
                   ))}
                </div>
                <div className="w-20 h-20 bg-white text-black rounded-2xl flex items-center justify-center font-black text-4xl shadow-[0_0_40px_rgba(255,255,255,0.2)]">
