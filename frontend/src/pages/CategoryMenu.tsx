@@ -4,10 +4,17 @@ import {
 } from 'lucide-react';
 import type { Language } from '../App';
 
+export interface Category {
+  id: string;
+  label: string;
+  prompt: string;
+}
+
 interface Props {
   language: Language;
   onSelectCategory: (cat: any) => void;
   onVoiceMode: () => void;
+  interactionMode?: 'text' | 'voice';
 }
 
 export default function CategoryMenu({ language, onSelectCategory }: Props) {
