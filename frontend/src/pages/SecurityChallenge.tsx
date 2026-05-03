@@ -1,4 +1,4 @@
-import { Fingerprint, ShieldCheck, Lock, Database } from 'lucide-react';
+import { Fingerprint, Lock, Database } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface Props {
