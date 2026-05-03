@@ -8,9 +8,10 @@ import Chat from './pages/Chat';
 import Dashboard from './pages/Dashboard';
 import Claim from './pages/Claim';
 import Purchase from './pages/Purchase';
+import HumanTransfer from './pages/HumanTransfer';
 
 export type Language = 'fr' | 'nouchi' | 'dioula' | 'baoule' | 'en' | null;
-export type Screen = 'SPLASH' | 'HOME' | 'MODE_SELECT' | 'CATEGORY' | 'CHAT_TEXT' | 'CHAT_VOICE' | 'DASHBOARD' | 'CLAIM' | 'PURCHASE';
+export type Screen = 'SPLASH' | 'HOME' | 'MODE_SELECT' | 'CATEGORY' | 'CHAT_TEXT' | 'CHAT_VOICE' | 'DASHBOARD' | 'CLAIM' | 'PURCHASE' | 'HUMAN_TRANSFER';
 
 function App() {
   const [screen, setScreen] = useState<Screen>('SPLASH');
@@ -27,7 +28,7 @@ function App() {
   };
 
   // On ne montre la navigation que sur les pages principales
-  const showNav = screen !== 'SPLASH' && screen !== 'HOME' && screen !== 'MODE_SELECT';
+  const showNav = screen !== 'SPLASH' && screen !== 'HOME' && screen !== 'MODE_SELECT' && screen !== 'HUMAN_TRANSFER';
 
   return (
     <div className="mobile-frame">
@@ -73,6 +74,8 @@ function App() {
           />
         )}
 
+        {screen === 'HUMAN_TRANSFER' && <HumanTransfer onBack={() => setScreen('CHAT_TEXT')} />}
+        
         {(screen === 'CHAT_TEXT' || screen === 'CHAT_VOICE') && (
           <Chat
             language={language}
@@ -80,6 +83,7 @@ function App() {
             initialPrompt={initialPrompt}
             category={selectedCategory}
             interactionMode={interactionMode}
+            onTransfer={() => setScreen('HUMAN_TRANSFER')}
           />
         )}
       </main>

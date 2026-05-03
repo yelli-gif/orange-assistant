@@ -9,6 +9,7 @@ interface Props {
   initialPrompt?: string | null;
   category?: Category | null;
   interactionMode?: 'text' | 'voice';
+  onTransfer: () => void;
 }
 
 interface Message {
@@ -21,7 +22,7 @@ interface Message {
 
 const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : '';
 
-export default function Chat({ language, initialPrompt, interactionMode }: Props) {
+export default function Chat({ language, initialPrompt, interactionMode, onTransfer }: Props) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -129,7 +130,10 @@ export default function Chat({ language, initialPrompt, interactionMode }: Props
                 
                 {msg.isComplex && (
                   <button 
-                    onClick={() => speak("D'accord, je vous passe un conseiller.")}
+                    onClick={() => {
+                      speak("D'accord, je vous passe un conseiller.");
+                      onTransfer();
+                    }}
                     className="mt-4 w-full bg-black text-white py-4 rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all text-xs uppercase tracking-widest"
                   >
                     <Headphones size={16} />
