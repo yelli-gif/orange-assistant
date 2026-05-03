@@ -56,7 +56,7 @@ export default function CategoryMenu({ language, onSelectCategory }: Props) {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-6 bg-[#F9F9F9] overflow-y-auto pb-24 animate-fade-in no-scrollbar">
+    <div className="flex flex-col p-6 animate-fade-in pb-10">
       
       {/* Orange Money Card - Image 13 */}
       <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-50 mb-10 relative overflow-hidden group">

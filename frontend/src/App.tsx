@@ -21,28 +21,28 @@ function App() {
 
   const goBack = () => {
     if (screen === 'CHAT_TEXT') setScreen('CATEGORY');
-    else if (screen === 'CATEGORY') setScreen('MODE_SELECT');
-    else if (screen === 'MODE_SELECT') setScreen('HOME');
+    else if (screen === 'CATEGORY') setScreen('DASHBOARD');
+    else if (screen === 'DASHBOARD') setScreen('SPLASH');
     else setScreen('SPLASH');
   };
 
   return (
-    <div className="min-h-screen bg-slate-200 flex justify-center items-center">
+    <div className="min-h-screen bg-slate-100 flex justify-center items-center">
       <div className="mobile-frame">
         
-        {/* Header App (Image 1) */}
-        <header className="bg-white px-6 py-8 flex items-center justify-between border-b border-slate-50 z-20">
+        {/* Header Fixe - Image 1 */}
+        <header className="bg-white px-6 py-6 flex items-center justify-between border-b border-slate-50 flex-shrink-0 z-20">
           <div className="flex items-center gap-3">
             <SignalMedium className="text-orange-brand" size={24} strokeWidth={3} />
-            <h1 className="text-orange-brand font-black text-xl tracking-tighter font-outfit">Orange Assistant</h1>
+            <h1 className="text-orange-brand font-black text-[22px] tracking-tighter font-outfit">Orange Assistant</h1>
           </div>
           <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
              <UserCircle2 size={24} />
           </div>
         </header>
 
-        {/* Content Area */}
-        <main className="flex-1 overflow-y-auto flex flex-col bg-[#F9F9F9] no-scrollbar">
+        {/* Zone de Contenu Scrollable - Ne peut PAS être cachée par la nav */}
+        <main className="content-area no-scrollbar">
           {screen === 'SPLASH' && <SplashScreen onStart={() => setScreen('HOME')} />}
           {screen === 'HOME' && <LanguageSelection onSelect={(l) => { setLanguage(l); setScreen('MODE_SELECT'); }} />}
           {screen === 'MODE_SELECT' && (
@@ -82,43 +82,37 @@ function App() {
           )}
         </main>
 
-        {/* Floating Robot AI Button - Vocalisé */}
+        {/* Bouton Flottant IA - Position absolue par rapport au téléphone */}
         {screen !== 'SPLASH' && screen !== 'HOME' && (
           <button 
             onClick={() => setScreen('CHAT_TEXT')}
-            onMouseEnter={() => {
-                const msg = new SpeechSynthesisUtterance("Cliquez ici pour me parler");
-                msg.lang = 'fr-FR';
-                window.speechSynthesis.speak(msg);
-            }}
-            className="fixed bottom-24 right-6 w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center shadow-2xl z-50 border border-white/10 active:scale-95 transition-transform animate-bounce"
+            className="absolute bottom-24 right-6 w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center shadow-2xl z-40 border border-white/10 active:scale-95 transition-all animate-bounce"
           >
             <Bot size={28} />
           </button>
         )}
 
-
-        {/* Navigation Bar (Bottom) - Style Pixel Perfect */}
-        <nav className="bg-white border-t border-slate-50 px-8 py-4 flex justify-between items-center z-20">
-          <button onClick={() => setScreen('SPLASH')} className={`flex flex-col items-center gap-1 transition-all ${screen === 'SPLASH' || screen === 'HOME' ? 'text-orange-900' : 'text-slate-400'}`}>
-            <div className={`p-4 rounded-[1.2rem] transition-all ${screen === 'SPLASH' || screen === 'HOME' ? 'bg-[#FFF5ED] text-[#FF7900]' : ''}`}>
-              <Home size={26} strokeWidth={screen === 'SPLASH' || screen === 'HOME' ? 2.5 : 1.5} />
+        {/* Navigation Basse Fixe - Ne recouvre jamais le contenu */}
+        <nav className="bottom-nav">
+          <button onClick={() => setScreen('DASHBOARD')} className={`flex flex-col items-center gap-1 flex-1 transition-all ${screen === 'DASHBOARD' || screen === 'SPLASH' ? 'text-[#FF7900]' : 'text-slate-400'}`}>
+            <div className={`p-4 rounded-[1.2rem] transition-all ${(screen === 'DASHBOARD' || screen === 'SPLASH') && screen !== 'CATEGORY' && screen !== 'PURCHASE' ? 'bg-[#FFF5ED]' : ''}`}>
+              <Home size={26} strokeWidth={(screen === 'DASHBOARD' || screen === 'SPLASH') && screen !== 'CATEGORY' && screen !== 'PURCHASE' ? 3 : 1.5} />
             </div>
-            <span className="text-[11px] font-black uppercase tracking-tighter">Accueil</span>
+            <span className="text-[10px] font-black uppercase tracking-tighter">Accueil</span>
           </button>
           
-          <button onClick={() => setScreen('CATEGORY')} className={`flex flex-col items-center gap-1 transition-all ${screen === 'CATEGORY' ? 'text-orange-900' : 'text-slate-400'}`}>
-            <div className={`p-4 rounded-[1.2rem] transition-all ${screen === 'CATEGORY' ? 'bg-[#FFF5ED] text-[#FF7900]' : ''}`}>
-              <Grid size={26} strokeWidth={screen === 'CATEGORY' ? 2.5 : 1.5} />
+          <button onClick={() => setScreen('CATEGORY')} className={`flex flex-col items-center gap-1 flex-1 transition-all ${screen === 'CATEGORY' ? 'text-[#FF7900]' : 'text-slate-400'}`}>
+            <div className={`p-4 rounded-[1.2rem] transition-all ${screen === 'CATEGORY' ? 'bg-[#FFF5ED]' : ''}`}>
+              <Grid size={26} strokeWidth={screen === 'CATEGORY' ? 3 : 1.5} />
             </div>
-            <span className="text-[11px] font-black uppercase tracking-tighter">Services</span>
+            <span className="text-[10px] font-black uppercase tracking-tighter">Services</span>
           </button>
           
-          <button onClick={() => setScreen('PURCHASE')} className={`flex flex-col items-center gap-1 transition-all ${screen === 'PURCHASE' ? 'text-orange-900' : 'text-slate-400'}`}>
-            <div className={`p-4 rounded-[1.2rem] transition-all ${screen === 'PURCHASE' ? 'bg-[#FFF5ED] text-[#FF7900]' : ''}`}>
-              <LayoutDashboard size={26} strokeWidth={screen === 'PURCHASE' ? 2.5 : 1.5} />
+          <button onClick={() => setScreen('PURCHASE')} className={`flex flex-col items-center gap-1 flex-1 transition-all ${screen === 'PURCHASE' ? 'text-[#FF7900]' : 'text-slate-400'}`}>
+            <div className={`p-4 rounded-[1.2rem] transition-all ${screen === 'PURCHASE' ? 'bg-[#FFF5ED]' : ''}`}>
+              <LayoutDashboard size={26} strokeWidth={screen === 'PURCHASE' ? 3 : 1.5} />
             </div>
-            <span className="text-[11px] font-black uppercase tracking-tighter">Tableau</span>
+            <span className="text-[10px] font-black uppercase tracking-tighter">Tableau</span>
           </button>
         </nav>
       </div>

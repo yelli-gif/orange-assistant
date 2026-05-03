@@ -31,7 +31,7 @@ export default function Purchase({ language }: Props) {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-8 bg-[#F9F9F9] overflow-y-auto pb-32 animate-fade-in relative">
+    <div className="flex flex-col p-8 animate-fade-in relative pb-10">
       
       <div className="mb-10 mt-2 flex justify-between items-start">
         <div className="max-w-[80%]">
@@ -43,6 +43,7 @@ export default function Purchase({ language }: Props) {
         </button>
       </div>
 
+      {/* Tabs - Image 3 */}
       <div className="flex bg-slate-100/50 p-1.5 rounded-2xl mb-8">
         {['Journalier', 'Hebdomadaire', 'Mensuel'].map((t) => (
           <button 
@@ -57,6 +58,7 @@ export default function Purchase({ language }: Props) {
         ))}
       </div>
 
+      {/* Packages List - Image 3 */}
       <div className="space-y-4 mb-10">
         {PACKAGES.map((pkg) => (
           <button 
@@ -80,10 +82,25 @@ export default function Purchase({ language }: Props) {
         ))}
       </div>
 
-      <div className="sticky bottom-0 left-0 right-0 pt-4 bg-gradient-to-t from-[#F9F9F9] to-transparent">
+      {/* Promo Banner - Image 4 */}
+      <div className="relative w-full aspect-[2/1] rounded-[2.5rem] overflow-hidden shadow-xl mb-10">
+         <img 
+            src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=600" 
+            alt="Promo" 
+            className="w-full h-full object-cover grayscale"
+         />
+         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8">
+            <h4 className="text-white font-black text-2xl mb-1">Promotion Weekend</h4>
+            <p className="text-white/70 text-sm font-bold uppercase tracking-widest">Bonus de 50% sur les forfaits 2Go</p>
+         </div>
+      </div>
+
+      {/* Bouton Valider */}
+      <div className="pt-4">
         <button onClick={() => speak("Cliquez ici pour confirmer l'achat de votre forfait.")} className="w-full bg-[#FF7900] text-white py-6 rounded-[25px] font-black text-xl shadow-2xl shadow-orange-brand/30 active:scale-95 transition-transform flex items-center justify-center gap-3 uppercase tracking-tighter">
           Valider l'achat
         </button>
+        <p className="text-center text-[10px] text-[#AAAAAA] font-bold mt-4">Votre forfait sera activé après confirmation.</p>
       </div>
 
     </div>

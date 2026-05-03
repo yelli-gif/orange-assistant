@@ -7,55 +7,70 @@
 :root {
   --orange-brand: #FF7900;
   --bg-app: #F9F9F9;
-  --text-main: #2D2D2D;
-  --text-muted: #757575;
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: #E5E7EB; /* Couleur fond pour simuler le téléphone */
-  color: var(--text-main);
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body, html {
   margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #f1f1f1;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden; /* Empêche le scroll du body sur desktop */
 }
 
-/* Container Type Téléphone comme sur vos maquettes */
+/* Le cadre mobile principal */
 .mobile-frame {
-  @apply w-full h-[100dvh] bg-[#F9F9F9] shadow-2xl relative flex flex-col overflow-hidden;
+  width: 100%;
+  max-width: 450px; /* Limite sur desktop pour garder l'aspect mobile */
+  height: 100dvh;
+  margin: 0 auto;
+  background-color: var(--bg-app);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 50px rgba(0,0,0,0.1);
 }
 
-@layer components {
-  .btn-orange {
-    @apply bg-orange-brand text-white font-bold py-4 px-8 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-orange-brand/20;
-  }
-  
-  .card-language {
-    @apply bg-white border-2 border-transparent rounded-2xl p-6 flex flex-col items-center justify-center gap-4 transition-all shadow-sm;
-  }
-  
-  .card-language.selected {
-    @apply border-orange-brand ring-1 ring-orange-brand/20;
-  }
-
-  .nav-item {
-    @apply flex flex-col items-center gap-1 text-[10px] font-bold text-slate-400 transition-colors;
-  }
-
-  .nav-item.active {
-    @apply text-orange-brand;
-  }
+/* Zone de contenu principale scrollable */
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* Scroll fluide iOS */
+  display: flex;
+  flex-direction: column;
 }
 
-/* Effets d'ondes pour le micro (Ripple Effect de vos maquettes) */
-.ripple-container {
-  @apply relative flex items-center justify-center;
-}
-.ripple {
-  @apply absolute rounded-full border border-orange-brand/20 animate-ping;
-}
+/* Cache la barre de scroll tout en gardant sa fonctionnalité */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Style des boutons d'Orange */
+.btn-orange {
+  @apply bg-[#FF7900] text-white font-black py-5 px-8 rounded-[22px] flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-orange-brand/20;
+}
+
+/* Navigation basse */
+.bottom-nav {
+  height: 85px;
+  background-color: white;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 10px;
+  flex-shrink: 0;
+  z-index: 50;
 }

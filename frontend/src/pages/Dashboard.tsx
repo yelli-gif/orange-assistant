@@ -23,7 +23,7 @@ export default function Dashboard({ language }: Props) {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-6 bg-[#F9F9F9] overflow-y-auto pb-24 animate-fade-in">
+    <div className="flex flex-col p-6 animate-fade-in pb-10">
       
       <div className="mb-8 mt-2 flex justify-between items-start">
         <div>
