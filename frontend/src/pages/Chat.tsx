@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send, Volume2, Mic, User, Bot, Headphones } from 'lucide-react';
+import { Send, Mic, User, Bot, Headphones } from 'lucide-react';
 import type { Language } from '../App';
 import type { Category } from './CategoryMenu';
 
