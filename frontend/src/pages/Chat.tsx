@@ -43,7 +43,15 @@ export default function Chat({ language, initialPrompt, interactionMode, onTrans
   const speak = (msg: string) => {
     if (interactionMode !== 'voice') return;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(msg);
+    
+    // Nettoyage du texte pour la voix (enlever étoiles, puces, etc.)
+    const cleanText = msg
+      .replace(/\*\*/g, '') // Enlever les gras
+      .replace(/\*/g, '')   // Enlever les étoiles simples
+      .replace(/•/g, ', ')  // Remplacer les puces par des virgules pour la pause
+      .replace(/\n/g, '. '); // Remplacer les retours à la ligne par des points
+      
+    const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = language === 'en' ? 'en-US' : 'fr-FR';
     window.speechSynthesis.speak(utterance);
   };
