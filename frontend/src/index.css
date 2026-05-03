@@ -12,6 +12,7 @@
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; /* Optimise les clics sur mobile */
 }
 
 body, html {
@@ -21,13 +22,17 @@ body, html {
   width: 100%;
   background-color: #f1f1f1;
   font-family: 'Inter', sans-serif;
-  overflow: hidden; /* Empêche le scroll du body sur desktop */
+  overflow: hidden;
 }
 
-/* Le cadre mobile principal */
+#root {
+  height: 100%;
+}
+
+/* Le cadre mobile principal - Correction du centrage mobile */
 .mobile-frame {
   width: 100%;
-  max-width: 450px; /* Limite sur desktop pour garder l'aspect mobile */
+  max-width: 450px;
   height: 100dvh;
   margin: 0 auto;
   background-color: var(--bg-app);
@@ -35,7 +40,6 @@ body, html {
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 50px rgba(0,0,0,0.1);
 }
 
 /* Zone de contenu principale scrollable */
@@ -43,12 +47,21 @@ body, html {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch; /* Scroll fluide iOS */
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
 }
 
-/* Cache la barre de scroll tout en gardant sa fonctionnalité */
+/* Animations flash */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -57,12 +70,10 @@ body, html {
   scrollbar-width: none;
 }
 
-/* Style des boutons d'Orange */
 .btn-orange {
   @apply bg-[#FF7900] text-white font-black py-5 px-8 rounded-[22px] flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-orange-brand/20;
 }
 
-/* Navigation basse */
 .bottom-nav {
   height: 85px;
   background-color: white;
