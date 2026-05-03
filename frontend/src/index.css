@@ -6,13 +6,14 @@
 
 :root {
   --orange-brand: #FF7900;
+  --orange-deep: #D66500;
   --bg-app: #F9F9F9;
 }
 
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation; /* Optimise les clics sur mobile */
+  touch-action: manipulation;
 }
 
 body, html {
@@ -20,7 +21,7 @@ body, html {
   padding: 0;
   height: 100%;
   width: 100%;
-  background-color: #f1f1f1;
+  background-color: #000;
   font-family: 'Inter', sans-serif;
   overflow: hidden;
 }
@@ -29,7 +30,6 @@ body, html {
   height: 100%;
 }
 
-/* Le cadre mobile principal - Correction du centrage mobile */
 .mobile-frame {
   width: 100%;
   max-width: 450px;
@@ -40,9 +40,12 @@ body, html {
   flex-direction: column;
   position: relative;
   overflow: hidden;
+  /* Fond dégradé subtil pour le look premium */
+  background: radial-gradient(circle at top right, rgba(255, 121, 0, 0.05), transparent),
+              radial-gradient(circle at bottom left, rgba(255, 121, 0, 0.02), transparent),
+              #FDFDFD;
 }
 
-/* Zone de contenu principale scrollable */
 .content-area {
   flex: 1;
   overflow-y: auto;
@@ -52,36 +55,67 @@ body, html {
   flex-direction: column;
 }
 
-/* Animations flash */
+/* Look Glassmorphism */
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.03);
+}
+
+/* Animations Premium */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+@keyframes scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+@keyframes wave {
+  0%, 100% { height: 5px; }
+  50% { height: 25px; }
 }
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+
+.animate-fade-in {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: var(--orange-brand);
+  box-shadow: 0 0 15px var(--orange-brand);
+  animation: scan 2s ease-in-out infinite;
+}
+
+.wave-bar {
+  width: 3px;
+  background: var(--orange-brand);
+  border-radius: 10px;
+  animation: wave 1s ease-in-out infinite;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 .btn-orange {
-  @apply bg-[#FF7900] text-white font-black py-5 px-8 rounded-[22px] flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-orange-brand/20;
+  @apply bg-gradient-to-r from-[#FF7900] to-[#FF9033] text-white font-black py-5 px-8 rounded-[24px] flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-orange-brand/20 border-none;
 }
 
 .bottom-nav {
-  height: 85px;
-  background-color: white;
-  border-top: 1px solid rgba(0,0,0,0.05);
+  height: 90px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0,0,0,0.03);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 10px 10px 10px;
   flex-shrink: 0;
   z-index: 50;
 }
