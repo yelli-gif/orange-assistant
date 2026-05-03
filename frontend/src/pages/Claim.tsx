@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Wifi, Smartphone, Wallet, ShieldAlert, ChevronRight, Mic, Volume2 } from 'lucide-react';
+import { Wifi, Smartphone, Wallet, ShieldAlert, Mic, Volume2 } from 'lucide-react';
 
 const CATEGORIES = [
   { id: 'network', label: 'Réseau', icon: <Wifi size={24} />, speak: "Problème de connexion internet ou réseau." },

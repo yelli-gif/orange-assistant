@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
   Phone, CreditCard, Wifi, Wallet, Receipt, Home, ShieldCheck,
-  AlertCircle, Smartphone, Building2, Info, ChevronRight, Mic
+  AlertCircle, Mic
 } from 'lucide-react';
 
 export interface Category {
@@ -77,7 +77,6 @@ interface Props {
 
 
 export default function CategoryMenu({ onSelectCategory, onVoiceMode, language, interactionMode }: Props) {
-  const [isListening, setIsListening] = useState(false);
 
   useEffect(() => {
     if (interactionMode === 'text') return; // Silence en mode message
@@ -97,7 +96,6 @@ export default function CategoryMenu({ onSelectCategory, onVoiceMode, language, 
     const r = new SpeechRecognition();
     r.lang = language === 'en' ? 'en-US' : 'fr-FR';
     r.start();
-    setIsListening(true);
     r.onresult = (e: any) => {
       const t = e.results[0][0].transcript.toLowerCase();
       const match = CATEGORIES.find(c =>
@@ -110,7 +108,7 @@ export default function CategoryMenu({ onSelectCategory, onVoiceMode, language, 
         onSelectCategory({ ...CATEGORIES[10], prompt: e.results[0][0].transcript });
       }
     };
-    r.onend = () => setIsListening(false);
+    r.onend = () => {};
   };
 
   return (

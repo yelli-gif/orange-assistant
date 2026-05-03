@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Wallet, Smartphone, History, Mic, PlusCircle, Volume2 } from 'lucide-react';
+import { History, Mic, PlusCircle, Volume2 } from 'lucide-react';
 
 interface Props {
   language: string | null;

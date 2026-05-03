@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Wifi, Zap, CheckCircle2, Mic, Volume2 } from 'lucide-react';
+import { Wifi, Zap, Volume2 } from 'lucide-react';
 
 const PACKAGES = [
   { id: 1, amount: '500 Mo', price: '500 francs', validity: 'Valide 24 heures', icon: <Wifi size={24} className="text-orange-brand" />, speak: "Pack 500 méga, prix 500 francs, valable 24 heures." },
