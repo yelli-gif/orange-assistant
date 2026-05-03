@@ -14,6 +14,7 @@ export const translations = {
     bot_greeting: "Bonjour, comment puis-je vous aider ?",
     home: "Accueil",
     tableau: "Tableau",
+    internet: "Forfait Internet",
   },
   en: {
     welcome: "Welcome",
@@ -30,6 +31,7 @@ export const translations = {
     bot_greeting: "Hello, how can I help you today?",
     home: "Home",
     tableau: "Dashboard",
+    internet: "Data Bundle",
   },
   dioula: {
     welcome: "I ni tché",
@@ -46,6 +48,7 @@ export const translations = {
     bot_greeting: "I ni tché, n'bé i démén di ?",
     home: "So",
     tableau: "Tableau",
+    internet: "Internet Taaba",
   },
   baoule: {
     welcome: "Mo",
@@ -62,5 +65,6 @@ export const translations = {
     bot_greeting: "Mo, n'ni o sroun di ?",
     home: "Aulo",
     tableau: "Tableau",
+    internet: "Internet Sika",
   }
 };

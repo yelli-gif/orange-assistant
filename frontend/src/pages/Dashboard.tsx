@@ -84,6 +84,18 @@ export default function Dashboard({ language, interactionMode }: Props) {
               <span className="text-xl font-bold text-[#FF7900]">FCFA</span>
            </div>
         </button>
+
+        {/* Forfait Card */}
+        <button 
+            onClick={() => speak(`${t.internet} 1 500`)}
+            className="w-full bg-white p-7 rounded-[2.5rem] shadow-sm flex flex-col gap-4 border border-slate-50 text-left active:scale-95 transition-transform"
+        >
+           <p className="text-[#757575] text-[12px] font-black uppercase tracking-widest">{t.internet}</p>
+           <div className="flex items-baseline gap-2">
+              <span className="text-5xl font-outfit font-black text-[#2D2D2D]">2,3</span>
+              <span className="text-xl font-bold text-[#FF7900]">Go</span>
+           </div>
+        </button>
       </div>
 
       {/* Bouton "Parlez-moi" */}
