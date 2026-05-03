@@ -52,9 +52,9 @@ function App() {
             }} language={language} />
           )}
           
-          {screen === 'DASHBOARD' && <Dashboard language={language} />}
-          {screen === 'CLAIM' && <Claim language={language} />}
-          {screen === 'PURCHASE' && <Purchase language={language} />}
+          {screen === 'DASHBOARD' && <Dashboard language={language} interactionMode={interactionMode} />}
+          {screen === 'CLAIM' && <Claim language={language} interactionMode={interactionMode} />}
+          {screen === 'PURCHASE' && <Purchase language={language} interactionMode={interactionMode} />}
           
           {screen === 'CATEGORY' && (
             <CategoryMenu

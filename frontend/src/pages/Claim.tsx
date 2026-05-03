@@ -10,11 +10,13 @@ const CATEGORIES = [
 
 interface Props {
   language: string | null;
+  interactionMode?: 'text' | 'voice';
 }
 
-export default function Claim({ language }: Props) {
+export default function Claim({ language, interactionMode }: Props) {
   
   useEffect(() => {
+    if (interactionMode !== 'voice') return;
     const text = language === 'en' ? "Explain your problem verbally or choose a category below." : "Expliquez votre problème vocalement, ou choisissez une catégorie ci-dessous.";
     const msg = new SpeechSynthesisUtterance(text);
     msg.lang = language === 'en' ? 'en-US' : 'fr-FR';
@@ -23,6 +25,7 @@ export default function Claim({ language }: Props) {
   }, [language]);
 
   const speak = (msgText: string) => {
+    if (interactionMode !== 'voice') return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(msgText);
     utterance.lang = language === 'en' ? 'en-US' : 'fr-FR';

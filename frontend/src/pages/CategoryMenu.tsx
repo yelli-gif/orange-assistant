@@ -17,12 +17,13 @@ interface Props {
   interactionMode?: 'text' | 'voice';
 }
 
-export default function CategoryMenu({ language, onSelectCategory }: Props) {
+export default function CategoryMenu({ language, onSelectCategory, interactionMode }: Props) {
   const [showBalance, setShowBalance] = useState(true);
   const [isListening, setIsListening] = useState(false);
 
-  // Système d'écoute automatique des mots-clés (pour l'accessibilité vocale)
+  // Système d'écoute automatique des mots-clés (uniquement en mode voix)
   useEffect(() => {
+    if (interactionMode !== 'voice') return;
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) return;
 
@@ -46,9 +47,10 @@ export default function CategoryMenu({ language, onSelectCategory }: Props) {
 
     recognition.start();
     return () => recognition.stop();
-  }, [language, onSelectCategory]);
+  }, [language, onSelectCategory, interactionMode]);
 
   const speak = (txt: string) => {
+    if (interactionMode !== 'voice') return;
     window.speechSynthesis.cancel();
     const msg = new SpeechSynthesisUtterance(txt);
     msg.lang = language === 'en' ? 'en-US' : 'fr-FR';

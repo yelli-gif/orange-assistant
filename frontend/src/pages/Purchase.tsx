@@ -9,13 +9,15 @@ const PACKAGES = [
 
 interface Props {
   language: string | null;
+  interactionMode?: 'text' | 'voice';
 }
 
-export default function Purchase({ language }: Props) {
+export default function Purchase({ language, interactionMode }: Props) {
   const [tab, setTab] = useState('Journalier');
   const [selectedId, setSelectedId] = useState(1);
 
   useEffect(() => {
+    if (interactionMode !== 'voice') return;
     const text = language === 'en' ? "Choose your internet package." : "Choisissez votre forfait internet. Cliquez sur un prix pour l'entendre.";
     const msg = new SpeechSynthesisUtterance(text);
     msg.lang = language === 'en' ? 'en-US' : 'fr-FR';
@@ -24,6 +26,7 @@ export default function Purchase({ language }: Props) {
   }, [language]);
 
   const speak = (msgText: string) => {
+    if (interactionMode !== 'voice') return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(msgText);
     utterance.lang = language === 'en' ? 'en-US' : 'fr-FR';
