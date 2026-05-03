@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { 
-  Send, Wallet, Receipt, Phone, ArrowUpCircle, Eye, EyeOff, Mic, Plus, Headphones
+  Send, Wallet, Receipt, Phone, Eye, EyeOff, Mic, Headphones
 } from 'lucide-react';
 import { translations } from '../translations';
 import type { Language } from '../App';
@@ -20,7 +20,6 @@ interface Props {
 
 export default function CategoryMenu({ language, onSelectCategory, interactionMode }: Props) {
   const [showBalance, setShowBalance] = useState(true);
-  const [isListening, setIsListening] = useState(false);
   const t = translations[language as keyof typeof translations] || translations.fr;
 
   useEffect(() => {
@@ -33,7 +32,7 @@ export default function CategoryMenu({ language, onSelectCategory, interactionMo
     recognition.continuous = true;
     recognition.interimResults = false;
 
-    recognition.onstart = () => setIsListening(true);
+    recognition.onstart = () => {};
     recognition.onresult = (event: any) => {
       const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
       if (transcript.includes('transfert') || transcript.includes('transfer')) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { History, Mic, PlusCircle, Volume2 } from 'lucide-react';
+import { History, Mic, Volume2 } from 'lucide-react';
 import { translations } from '../translations';
 import type { Language } from '../App';
 
