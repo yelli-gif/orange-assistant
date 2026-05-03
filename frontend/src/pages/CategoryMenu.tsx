@@ -57,31 +57,6 @@ export default function CategoryMenu({ language, onSelectCategory, interactionMo
   return (
     <div className="flex flex-col p-6 animate-fade-in pb-10">
       
-      {/* Orange Money Card */}
-      <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-50 mb-10 relative overflow-hidden">
-         <div className="flex justify-between items-start mb-4">
-            <div>
-               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{t.balance}</p>
-               <h3 className="text-4xl font-outfit font-black text-[#1A1A1A]">
-                  {showBalance ? '1.500' : '••••••'} <span className="text-xl font-bold text-[#A35200]">CFA</span>
-               </h3>
-            </div>
-            <div className="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600">
-               <Wallet size={24} />
-            </div>
-         </div>
-         
-         <div className="flex justify-between items-center mt-6">
-            <button 
-              onClick={() => { setShowBalance(!showBalance); speak(showBalance ? "Solde masqué" : "1 500 CFA"); }}
-              className="flex items-center gap-2 text-[#A35200] font-bold text-xs"
-            >
-               {showBalance ? <EyeOff size={18} /> : <Eye size={18} />}
-               {showBalance ? "Masquer" : "Afficher"}
-            </button>
-            <button className="bg-[#FF7900] text-white px-8 py-3 rounded-2xl font-black text-sm">{t.recharge}</button>
-         </div>
-      </div>
 
       <div className="mb-10">
         <h2 className="text-2xl font-outfit font-black text-[#1A1A1A] mb-6">{t.services}</h2>

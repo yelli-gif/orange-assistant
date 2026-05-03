@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { History, Mic, Volume2, ShieldCheck, Fingerprint } from 'lucide-react';
+import { History, Mic, Volume2, ShieldCheck, Fingerprint, Wallet, Eye, EyeOff } from 'lucide-react';
 import { translations } from '../translations';
 import type { Language } from '../App';
 
@@ -12,11 +12,11 @@ export default function Dashboard({ language, interactionMode }: Props) {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const [showBalance, setShowBalance] = useState(true);
   
   const t = translations[language as keyof typeof translations] || translations.fr;
 
   useEffect(() => {
-    // Simulation Authentication Biométrique Premium
     const timer = setTimeout(() => {
         setIsAuthenticating(false);
         if (interactionMode === 'voice') triggerwelcomeVoice();
@@ -95,21 +95,34 @@ export default function Dashboard({ language, interactionMode }: Props) {
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 mb-8">
-        {/* Solde Card Glass */}
-        <button 
-            onClick={() => speak(`${t.balance} 45 250`)}
-            className="glass-card p-8 rounded-[2.5rem] flex flex-col gap-4 text-left active:scale-95 transition-all relative overflow-hidden"
-        >
-           <div className="absolute top-0 right-0 p-6 opacity-5">
-               <ShieldCheck size={80} />
-           </div>
-           <p className="text-[#757575] text-[11px] font-black uppercase tracking-[0.2em]">{t.balance}</p>
-           <div className="flex items-baseline gap-2">
-              <span className="text-6xl font-outfit font-black text-[#2D2D2D] tracking-tighter">45.250</span>
-              <span className="text-2xl font-bold text-[#FF7900]">CFA</span>
-           </div>
-        </button>
+      <div className="space-y-6 mb-10">
+        {/* Nouveau Cadre Solde Premium - Votre Image envoyée */}
+        <div className="bg-white p-8 rounded-[2.5rem] shadow-2xl shadow-orange-brand/5 border border-slate-50 relative overflow-hidden group">
+            <div className="flex justify-between items-start mb-6">
+                <div>
+                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">{t.balance}</p>
+                    <h3 className="text-5xl font-outfit font-black text-[#1A1A1A] tracking-tighter">
+                        {showBalance ? '45.250' : '••••••'} <span className="text-2xl font-bold text-orange-brand ml-1">CFA</span>
+                    </h3>
+                </div>
+                <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-brand shadow-inner">
+                    <Wallet size={28} />
+                </div>
+            </div>
+            
+            <div className="flex justify-between items-center mt-8">
+                <button 
+                  onClick={() => { setShowBalance(!showBalance); speak(showBalance ? "Solde masqué" : "45 250 CFA"); }}
+                  className="flex items-center gap-3 text-slate-400 hover:text-orange-brand transition-colors font-bold text-xs"
+                >
+                   {showBalance ? <EyeOff size={20} /> : <Eye size={20} />}
+                   {showBalance ? "Masquer" : "Afficher"}
+                </button>
+                <button className="bg-[#FF7900] text-white px-10 py-4 rounded-2xl font-black text-sm shadow-xl shadow-orange-brand/30 active:scale-95 transition-all">
+                  {t.recharge}
+                </button>
+            </div>
+        </div>
 
         {/* Forfait Card Glass */}
         <button 
