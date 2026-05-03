@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { 
-  Send, Wallet, Receipt, Phone, ArrowUpCircle, Eye, EyeOff, Mic, ArrowDownCircle, Plus
+  Send, Wallet, Receipt, Phone, ArrowUpCircle, Eye, EyeOff, Mic, Plus, Headphones
 } from 'lucide-react';
 import type { Language } from '../App';
 
@@ -99,7 +99,7 @@ export default function CategoryMenu({ language, onSelectCategory, interactionMo
         <div className="grid grid-cols-2 gap-4">
           {[
             { id: 'transfer', label: 'Transfert', sub: 'Envoyer de l\'argent vers un tiers', icon: <Send size={24} />, speak: "Faire un transfert d'argent" },
-            { id: 'retrait', label: 'Retrait', sub: 'Retrait en agence ou DAB', icon: <ArrowDownCircle size={24} />, speak: "Faire un retrait en espèces" },
+            { id: 'reclamation', label: 'Assistance', sub: 'Aide, Réseau, Facturation', icon: <Headphones size={24} />, speak: "Obtenir de l'aide ou faire une réclamation" },
             { id: 'bill', label: 'Factures', sub: 'CIE, SODECI, Canal+, et plus', icon: <Receipt size={24} />, speak: "Payer une facture" },
             { id: 'credit', label: 'Crédit', sub: 'Recharger votre ligne mobile', icon: <Phone size={24} />, speak: "Acheter du crédit ou un forfait" },
           ].map((serv) => (
