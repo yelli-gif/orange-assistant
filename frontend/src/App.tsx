@@ -95,8 +95,8 @@ function App() {
         {/* Navigation Basse Fixe - Ne recouvre jamais le contenu */}
         <nav className="bottom-nav">
           <button onClick={() => setScreen('DASHBOARD')} className={`flex flex-col items-center gap-1 flex-1 transition-all ${screen === 'DASHBOARD' || screen === 'SPLASH' ? 'text-[#FF7900]' : 'text-slate-400'}`}>
-            <div className={`p-4 rounded-[1.2rem] transition-all ${(screen === 'DASHBOARD' || screen === 'SPLASH') && screen !== 'CATEGORY' && screen !== 'PURCHASE' ? 'bg-[#FFF5ED]' : ''}`}>
-              <Home size={26} strokeWidth={(screen === 'DASHBOARD' || screen === 'SPLASH') && screen !== 'CATEGORY' && screen !== 'PURCHASE' ? 3 : 1.5} />
+            <div className={`p-4 rounded-[1.2rem] transition-all ${screen === 'DASHBOARD' || screen === 'SPLASH' ? 'bg-[#FFF5ED]' : ''}`}>
+              <Home size={26} strokeWidth={screen === 'DASHBOARD' || screen === 'SPLASH' ? 3 : 1.5} />
             </div>
             <span className="text-[10px] font-black uppercase tracking-tighter">Accueil</span>
           </button>
